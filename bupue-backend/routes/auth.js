@@ -90,4 +90,32 @@ router.get('/me', auth, async (req, res) => {
   }
 });
 
+// Edit user profile (auth required)
+router.put('/profile', auth, async (req, res) => {
+  try {
+    const updates = req.body;
+    const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    Object.keys(updates).forEach(key => {
+      if (key !== 'password') user[key] = updates[key];
+    });
+    await user.save();
+    res.json(user);
+  } catch (err) {
+    res.status(400).json({ message: 'Failed to update profile' });
+  }
+});
+
+// Delete user account (auth required)
+router.delete('/profile', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    await user.deleteOne();
+    res.json({ message: 'Account deleted' });
+  } catch (err) {
+    res.status(400).json({ message: 'Failed to delete account' });
+  }
+});
+
 module.exports = router; 

@@ -1,0 +1,47 @@
+.profile-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.07);
+  padding: 2rem;
+}
+
+.profile-container h2 {
+  margin-top: 0;
+}
+
+.edit-profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-bottom: 1.5rem;
+}
+.edit-profile-form input {
+  font-size: 1.1rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+.edit-profile-form button {
+  width: fit-content;
+  margin-right: 0.5rem;
+}
+.profile-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+}
+.profile-actions button {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.4rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.profile-actions .danger {
+  background: #dc3545;
+} 

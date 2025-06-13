@@ -1,7 +1,7 @@
 {
   "name": "bupue-backend",
   "version": "1.0.0",
-  "description": "Backend for Bupue application",
+  "description": "Backend for Bupue platform",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -12,10 +12,14 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-rate-limit": "^6.7.0",
+    "helmet": "^6.1.5",
+    "hpp": "^0.2.3",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.0.3"
+    "mongoose": "^7.0.3",
+    "xss-clean": "^0.1.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
   }
-} 
+}

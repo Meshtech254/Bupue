@@ -22,7 +22,8 @@ const userSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  isAdmin: { type: Boolean, default: false },
 });
 
 // Hash password before saving
