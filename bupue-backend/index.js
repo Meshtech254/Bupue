@@ -2,14 +2,26 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 const authRoutes = require('./routes/auth');
 const postsRoutes = require('./routes/posts');
 const coursesRoutes = require('./routes/courses');
 const itemsRoutes = require('./routes/items');
 const ordersRoutes = require('./routes/orders');
 
-// Load environment variables
-dotenv.config();
+// Load environment variables with absolute path
+const envPath = path.resolve(__dirname, '.env');
+console.log('Loading .env file from:', envPath);
+dotenv.config({ path: envPath });
+
+// Debug: Log environment variables (excluding sensitive values)
+console.log('Environment variables loaded:', {
+  NODE_ENV: process.env.NODE_ENV,
+  PORT: process.env.PORT,
+  MONGODB_URI: process.env.MONGODB_URI ? 'Set' : 'Not set',
+  JWT_SECRET: process.env.JWT_SECRET ? 'Set' : 'Not set',
+  JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN
+});
 
 const app = express();
 
