@@ -26,15 +26,15 @@ const PostList = () => {
   if (error) return <div className="error">{error}</div>;
 
   return (
-    <div className="posts-container">
-      <h2>Posts</h2>
-      <Link to="/posts/create" className="create-post-btn">Create Post</Link>
-      <div className="posts-list">
+    <div className="events-container">
+      <h2>Events</h2>
+      <Link to="/events/create" className="create-event-btn">Create Event</Link>
+      <div className="events-list">
         {posts.map(post => (
-          <div key={post._id} className="post-card">
-            <h3><Link to={`/posts/${post._id}`}>{post.title}</Link></h3>
+          <div key={post._id} className="event-card">
+            <h3><Link to={`/events/${post._id}`}>{post.title}</Link></h3>
             <p>{post.body.slice(0, 120)}...</p>
-            <div className="post-meta">By {post.author?.username || 'Unknown'} | {new Date(post.createdAt).toLocaleString()}</div>
+            <div className="event-meta">By {post.author?.username || 'Unknown'} | {new Date(post.createdAt).toLocaleString()}</div>
           </div>
         ))}
       </div>

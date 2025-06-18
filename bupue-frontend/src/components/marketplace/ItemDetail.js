@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Marketplace.css';
+import { useCart } from '../../context/CartContext';
 
 const ItemDetail = () => {
   const { id } = useParams();
@@ -14,6 +15,7 @@ const ItemDetail = () => {
   const [editError, setEditError] = useState('');
 
   const user = JSON.parse(localStorage.getItem('user') || 'null');
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchItem = async () => {
@@ -143,6 +145,7 @@ const ItemDetail = () => {
               <button onClick={handleDelete} className="danger">Delete</button>
             </div>
           )}
+          <button onClick={() => addToCart(item)}>Add to Cart</button>
         </>
       )}
     </div>

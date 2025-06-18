@@ -16,18 +16,18 @@ const CreatePost = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.post('/api/posts', form, {
+      await axios.post('/api/events', form, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      navigate('/posts');
+      navigate('/events');
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to create post');
+      setError(err.response?.data?.message || 'Failed to create event');
     }
   };
 
   return (
-    <div className="create-post-container">
-      <h2>Create Post</h2>
+    <div className="create-event-container">
+      <h2>Create Event</h2>
       {error && <div className="error">{error}</div>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
@@ -43,13 +43,13 @@ const CreatePost = () => {
         <div className="form-group">
           <textarea
             name="body"
-            placeholder="Write your post..."
+            placeholder="Write your event..."
             value={form.body}
             onChange={handleChange}
             required
           />
         </div>
-        <button type="submit">Post</button>
+        <button type="submit">Create Event</button>
       </form>
     </div>
   );

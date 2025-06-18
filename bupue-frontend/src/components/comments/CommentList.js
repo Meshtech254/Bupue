@@ -14,7 +14,7 @@ const CommentList = ({ postId }) => {
 
   const fetchComments = async () => {
     try {
-      const res = await axios.get(`/api/posts/${postId}/comments`);
+      const res = await axios.get(`/api/events/${postId}/comments`);
       setComments(res.data);
     } catch (err) {
       setError('Failed to load comments');
@@ -42,7 +42,7 @@ const CommentList = ({ postId }) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`/api/posts/${postId}/comments/${commentId}`, { text: editText }, {
+      await axios.put(`/api/events/${postId}/comments/${commentId}`, { text: editText }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setEditingId(null);
@@ -56,7 +56,7 @@ const CommentList = ({ postId }) => {
     if (!window.confirm('Are you sure you want to delete this comment?')) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`/api/posts/${postId}/comments/${commentId}`, {
+      await axios.delete(`/api/events/${postId}/comments/${commentId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchComments();

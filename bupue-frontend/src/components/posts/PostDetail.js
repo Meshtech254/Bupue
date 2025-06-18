@@ -21,10 +21,10 @@ const PostDetail = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await axios.get(`/api/posts/${id}`);
+        const res = await axios.get(`/api/events/${id}`);
         setPost(res.data);
       } catch (err) {
-        setError('Failed to load post');
+        setError('Failed to load event');
       } finally {
         setLoading(false);
       }
@@ -50,37 +50,37 @@ const PostDetail = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`/api/posts/${id}`, editForm, {
+      await axios.put(`/api/events/${id}`, editForm, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setEditing(false);
       setRefresh(r => !r);
     } catch (err) {
-      setEditError(err.response?.data?.message || 'Failed to update post');
+      setEditError(err.response?.data?.message || 'Failed to update event');
     }
   };
 
   const handleDelete = async () => {
-    if (!window.confirm('Are you sure you want to delete this post?')) return;
+    if (!window.confirm('Are you sure you want to delete this event?')) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`/api/posts/${id}`, {
+      await axios.delete(`/api/events/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      navigate('/posts');
+      navigate('/events');
     } catch (err) {
-      alert('Failed to delete post');
+      alert('Failed to delete event');
     }
   };
 
-  if (loading) return <div>Loading post...</div>;
+  if (loading) return <div>Loading event...</div>;
   if (error) return <div className="error">{error}</div>;
-  if (!post) return <div>Post not found.</div>;
+  if (!post) return <div>Event not found.</div>;
 
   return (
-    <div className="post-detail-container">
+    <div className="event-detail-container">
       {editing ? (
-        <form className="edit-post-form" onSubmit={handleEditSubmit}>
+        <form className="edit-event-form" onSubmit={handleEditSubmit}>
           <input
             type="text"
             name="title"
@@ -101,10 +101,10 @@ const PostDetail = () => {
       ) : (
         <>
           <h2>{post.title}</h2>
-          <div className="post-meta">By {post.author?.username || 'Unknown'} | {new Date(post.createdAt).toLocaleString()}</div>
-          <div className="post-body">{post.body}</div>
+          <div className="event-meta">By {post.author?.username || 'Unknown'} | {new Date(post.createdAt).toLocaleString()}</div>
+          <div className="event-body">{post.body}</div>
           {isAuthor && (
-            <div className="post-actions">
+            <div className="event-actions">
               <button onClick={handleEdit}>Edit</button>
               <button onClick={handleDelete} className="danger">Delete</button>
             </div>

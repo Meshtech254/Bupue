@@ -45,16 +45,15 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route path="/posts" element={<PrivateRoute><PostList /></PrivateRoute>} />
-          <Route path="/posts/create" element={<PrivateRoute><CreatePost /></PrivateRoute>} />
-          <Route path="/posts/:id" element={<PrivateRoute><PostDetail /></PrivateRoute>} />
+          <Route path="/events" element={<PrivateRoute><PostList /></PrivateRoute>} />
+          <Route path="/events/create" element={<PrivateRoute><CreatePost /></PrivateRoute>} />
+          <Route path="/events/:id" element={<PrivateRoute><PostDetail /></PrivateRoute>} />
           <Route path="/courses/:id" element={<PrivateRoute><CourseDetail /></PrivateRoute>} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/marketplace" element={<PrivateRoute><ItemList /></PrivateRoute>} />
           <Route path="/marketplace/create" element={<PrivateRoute><CreateItem /></PrivateRoute>} />
           <Route path="/marketplace/:id" element={<PrivateRoute><ItemDetail /></PrivateRoute>} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/marketplace/checkout" element={<Checkout />} />
           <Route path="/orders" element={<Orders />} />
         </Routes>
       </Router>

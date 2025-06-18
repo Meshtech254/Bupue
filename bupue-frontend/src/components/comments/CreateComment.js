@@ -13,7 +13,7 @@ const CreateComment = ({ postId, onCommentAdded }) => {
     setError('');
     try {
       const token = localStorage.getItem('token');
-      await axios.post(`/api/posts/${postId}/comments`, { text }, {
+      await axios.post(`/api/events/${postId}/comments`, { text }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setText('');

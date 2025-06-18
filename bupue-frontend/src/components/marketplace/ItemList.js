@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './Marketplace.css';
+import { useCart } from '../../context/CartContext';
 
 const ItemList = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const { cart, updateQuantity, removeFromCart, clearCart } = useCart();
+  const total = cart.reduce((sum, i) => sum + i.item.price * i.quantity, 0);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -45,6 +48,52 @@ const ItemList = () => {
             </div>
           </div>
         ))}
+      </div>
+      <div className="marketplace-cart-container">
+        <h3>Your Cart</h3>
+        {cart.length === 0 ? (
+          <div>Your cart is empty.</div>
+        ) : (
+          <>
+            <table className="cart-table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Subtotal</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {cart.map(({ item, quantity }) => (
+                  <tr key={item._id}>
+                    <td>{item.title}</td>
+                    <td>${item.price}</td>
+                    <td>
+                      <input
+                        type="number"
+                        min="1"
+                        value={quantity}
+                        onChange={e => updateQuantity(item._id, parseInt(e.target.value) || 1)}
+                        style={{ width: 50 }}
+                      />
+                    </td>
+                    <td>${(item.price * quantity).toFixed(2)}</td>
+                    <td>
+                      <button onClick={() => removeFromCart(item._id)} className="danger">Remove</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="cart-total">Total: <strong>${total.toFixed(2)}</strong></div>
+            <div className="cart-actions">
+              <button onClick={() => window.location.href='/marketplace/checkout'}>Proceed to Checkout</button>
+              <button onClick={clearCart} className="danger">Clear Cart</button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

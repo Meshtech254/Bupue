@@ -1,4 +1,4 @@
-.posts-container {
+.events-container {
   max-width: 700px;
   margin: 2rem auto;
   background: #fff;
@@ -7,7 +7,7 @@
   padding: 2rem;
 }
 
-.create-post-btn {
+.create-event-btn {
   display: inline-block;
   margin-bottom: 1.5rem;
   background: #2563eb;
@@ -18,35 +18,35 @@
   font-weight: 500;
   transition: background 0.2s;
 }
-.create-post-btn:hover {
+.create-event-btn:hover {
   background: #1746a2;
 }
 
-.posts-list {
+.events-list {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.post-card {
+.event-card {
   background: #f5f5f5;
   border-radius: 6px;
   padding: 1rem 1.5rem;
   box-shadow: 0 1px 4px rgba(0,0,0,0.04);
 }
 
-.post-card h3 {
+.event-card h3 {
   margin: 0 0 0.5rem 0;
   color: #2563eb;
 }
 
-.post-meta {
+.event-meta {
   color: #888;
   font-size: 0.9rem;
   margin-top: 0.5rem;
 }
 
-.create-post-container {
+.create-event-container {
   max-width: 500px;
   margin: 2rem auto;
   background: #fff;
@@ -55,12 +55,12 @@
   padding: 2rem;
 }
 
-.post-actions {
+.event-actions {
   margin-top: 1rem;
   display: flex;
   gap: 1rem;
 }
-.post-actions button {
+.event-actions button {
   background: #2563eb;
   color: #fff;
   border: none;
@@ -70,23 +70,23 @@
   cursor: pointer;
   transition: background 0.2s;
 }
-.post-actions .danger {
+.event-actions .danger {
   background: #dc3545;
 }
-.edit-post-form {
+.edit-event-form {
   display: flex;
   flex-direction: column;
   gap: 0.7rem;
   margin-bottom: 1.5rem;
 }
-.edit-post-form input,
-.edit-post-form textarea {
+.edit-event-form input,
+.edit-event-form textarea {
   font-size: 1.1rem;
   padding: 0.5rem;
   border-radius: 4px;
   border: 1px solid #ddd;
 }
-.edit-post-form button {
+.edit-event-form button {
   width: fit-content;
   margin-right: 0.5rem;
 } 

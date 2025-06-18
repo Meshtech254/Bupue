@@ -18,7 +18,7 @@ const Navbar = () => {
         {isLoggedIn && (
           <>
             <Link to="/courses">Courses</Link>
-            <Link to="/posts">Posts</Link>
+            <Link to="/events">Events</Link>
             <Link to="/marketplace">Marketplace</Link>
             <Link to="/cart" className="cart-link">
               <span className="cart-icon">🛒</span>
