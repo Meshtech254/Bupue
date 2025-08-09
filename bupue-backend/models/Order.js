@@ -10,13 +10,26 @@ const orderSchema = new mongoose.Schema({
     }
   ],
   total: { type: Number, required: true },
-  status: { type: String, default: 'pending', enum: ['pending', 'paid', 'shipped', 'completed', 'cancelled'] },
+  status: { 
+    type: String, 
+    default: 'pending', 
+    enum: ['pending', 'paid', 'payment_failed', 'shipped', 'completed', 'cancelled'] 
+  },
   shipping: {
     name: String,
     address: String,
     city: String,
     country: String,
     postalCode: String
+  },
+  paymentDetails: {
+    method: { type: String, enum: ['stripe', 'mpesa', 'paypal'] },
+    stripePaymentIntentId: String,
+    mpesaTransactionId: String,
+    amount: Number,
+    currency: { type: String, default: 'usd' },
+    paidAt: Date,
+    error: String
   }
 }, { timestamps: true });
 

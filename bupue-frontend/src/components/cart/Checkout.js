@@ -4,7 +4,7 @@ import { useCart } from '../../context/CartContext';
 import axios from 'axios';
 import './Cart.css';
 
-const Checkout = () => {
+const CheckoutSimple = () => {
   const { cart, clearCart } = useCart();
   const [shipping, setShipping] = useState({ name: '', address: '', city: '', country: '', postalCode: '' });
   const [error, setError] = useState('');
@@ -44,17 +44,28 @@ const Checkout = () => {
     <div className="cart-container">
       <h2>Checkout</h2>
       <div className="cart-total">Order Total: <strong>${total.toFixed(2)}</strong></div>
-      <form className="checkout-form" onSubmit={handleSubmit}>
-        <input name="name" placeholder="Full Name" value={shipping.name} onChange={handleChange} required />
-        <input name="address" placeholder="Address" value={shipping.address} onChange={handleChange} required />
-        <input name="city" placeholder="City" value={shipping.city} onChange={handleChange} required />
-        <input name="country" placeholder="Country" value={shipping.country} onChange={handleChange} required />
-        <input name="postalCode" placeholder="Postal Code" value={shipping.postalCode} onChange={handleChange} required />
-        <button type="submit" disabled={loading}>{loading ? 'Placing Order...' : 'Place Order'}</button>
-        {error && <div className="error">{error}</div>}
-      </form>
+      
+      <div>
+        <h3>Shipping Information</h3>
+        <form className="checkout-form" onSubmit={handleSubmit}>
+          <input name="name" placeholder="Full Name" value={shipping.name} onChange={handleChange} required />
+          <input name="address" placeholder="Address" value={shipping.address} onChange={handleChange} required />
+          <input name="city" placeholder="City" value={shipping.city} onChange={handleChange} required />
+          <input name="country" placeholder="Country" value={shipping.country} onChange={handleChange} required />
+          <input name="postalCode" placeholder="Postal Code" value={shipping.postalCode} onChange={handleChange} required />
+          <button type="submit" disabled={loading}>
+            {loading ? 'Placing Order...' : 'Place Order'}
+          </button>
+          {error && <div className="error">{error}</div>}
+        </form>
+        
+        <div className="payment-note">
+          <p><strong>Note:</strong> This is a simplified checkout. Payment integration with Stripe can be added once the environment is properly configured.</p>
+          <p>Orders will be created in "pending" status and can be processed through the admin panel.</p>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default Checkout; 
+export default CheckoutSimple;

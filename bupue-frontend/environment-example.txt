@@ -1,0 +1,7 @@
+# Create a .env file in bupue-frontend directory with these variables:
+
+# Stripe Configuration
+REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key_here
+
+# API Configuration  
+REACT_APP_API_URL=http://localhost:4000/api

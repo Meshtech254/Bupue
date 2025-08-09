@@ -1,0 +1,182 @@
+.admin-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.admin-tabs {
+  display: flex;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 2rem;
+}
+
+.admin-tabs button {
+  background: none;
+  border: none;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  font-size: 1rem;
+  color: #666;
+}
+
+.admin-tabs button.active {
+  color: #2563eb;
+  border-bottom-color: #2563eb;
+}
+
+.admin-tabs button:hover {
+  background: #f8f9fa;
+}
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.stat-card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.recent-orders {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  grid-column: 1 / -1;
+}
+
+.recent-orders h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.users-table, .orders-table, .content-table {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.user-item, .order-item, .content-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #2563eb;
+}
+
+.user-info, .order-info, .content-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.user-info strong, .order-info strong, .content-info strong {
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.user-info span, .order-info span, .content-info span {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.user-actions, .content-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.user-actions button, .content-actions button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.ban {
+  background: #dc3545;
+  color: white;
+}
+
+.unban {
+  background: #28a745;
+  color: white;
+}
+
+.delete {
+  background: #dc3545;
+  color: white;
+}
+
+.status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.status.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status.paid {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status.shipped {
+  background: #cce7ff;
+  color: #004085;
+}
+
+.status.completed {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.status.cancelled {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.banned {
+  color: #dc3545;
+  font-weight: bold;
+  background: #f8d7da;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.error {
+  color: #dc3545;
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 1rem;
+  border-radius: 4px;
+}

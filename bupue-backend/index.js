@@ -8,6 +8,9 @@ const postsRoutes = require('./routes/posts');
 const coursesRoutes = require('./routes/courses');
 const itemsRoutes = require('./routes/items');
 const ordersRoutes = require('./routes/orders');
+const paymentsRoutes = require('./routes/payments');
+const uploadRoutes = require('./routes/upload');
+const adminRoutes = require('./routes/admin');
 
 // Load environment variables with absolute path
 const envPath = path.resolve(__dirname, '.env');
@@ -35,6 +38,9 @@ app.use('/api/posts', postsRoutes);
 app.use('/api/courses', coursesRoutes);
 app.use('/api/items', itemsRoutes);
 app.use('/api/orders', ordersRoutes);
+app.use('/api/payments', paymentsRoutes);
+app.use('/api/upload', uploadRoutes);
+app.use('/api/admin', adminRoutes);
 
 // MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/bupue';

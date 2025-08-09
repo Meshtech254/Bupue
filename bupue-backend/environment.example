@@ -1,0 +1,54 @@
+# Server Configuration
+NODE_ENV=development
+PORT=4000
+
+# Database Configuration
+MONGODB_URI=mongodb://localhost:27017/bupue
+
+# JWT Configuration
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+JWT_EXPIRES_IN=1d
+
+# Frontend URL
+FRONTEND_URL=http://localhost:3000
+
+# Email Configuration (Choose one provider)
+# For SMTP (recommended for production)
+EMAIL_PROVIDER=smtp
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your-email@gmail.com
+SMTP_PASSWORD=your-app-password
+EMAIL_FROM=noreply@yourdomain.com
+
+# For Gmail (alternative)
+# EMAIL_PROVIDER=gmail
+# EMAIL_USER=your-email@gmail.com
+# EMAIL_APP_PASSWORD=your-gmail-app-password
+# EMAIL_FROM=noreply@yourdomain.com
+
+# Stripe Payment Configuration
+STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+
+# Cloudinary Configuration (for file uploads)
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
+
+# M-Pesa Configuration (for Kenya payments)
+MPESA_CONSUMER_KEY=your-mpesa-consumer-key
+MPESA_CONSUMER_SECRET=your-mpesa-consumer-secret
+MPESA_ENVIRONMENT=sandbox
+MPESA_BUSINESS_SHORT_CODE=your-business-short-code
+MPESA_PASSKEY=your-mpesa-passkey
+
+# System Settings
+SITE_NAME=Bupue
+ALLOW_REGISTRATION=true
+REQUIRE_EMAIL_VERIFICATION=true
+MAINTENANCE_MODE=false
+MAX_FILE_SIZE=10MB
+ALLOWED_FILE_TYPES=jpg,jpeg,png,gif,webp,pdf,mp4,mov
