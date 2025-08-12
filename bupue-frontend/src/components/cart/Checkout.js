@@ -4,10 +4,10 @@ import { useCart } from '../../context/CartContext';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import PaymentForm from './PaymentForm';
-import api from '../../api/client';
+import apiClient from '../../api/client';
 import './Cart.css';
 
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || 'pk_test_51H1234567890');
 
 const Checkout = () => {
   const { cart, clearCart } = useCart();
@@ -16,6 +16,7 @@ const Checkout = () => {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState('shipping'); // 'shipping' or 'payment'
   const [orderId, setOrderId] = useState(null);
+  const [clientSecret, setClientSecret] = useState(null);
   const navigate = useNavigate();
 
   const total = cart.reduce((sum, i) => sum + i.item.price * i.quantity, 0);
@@ -29,9 +30,17 @@ const Checkout = () => {
     setLoading(true);
     setError('');
     try {
+      // Create order first
       const items = cart.map(i => ({ item: i.item._id, quantity: i.quantity }));
-      const response = await api.post('/api/orders', { items, shipping });
-      setOrderId(response.data._id);
+      const orderResponse = await apiClient.post('/api/orders', { items, shipping });
+      setOrderId(orderResponse.data._id);
+      
+      // Create payment intent
+      const paymentResponse = await apiClient.post('/api/payments/create-payment-intent', {
+        amount: total,
+        orderId: orderResponse.data._id
+      });
+      setClientSecret(paymentResponse.data.clientSecret);
       setStep('payment');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create order');
@@ -75,16 +84,16 @@ const Checkout = () => {
         </div>
       )}
 
-      {step === 'payment' && (
+      {step === 'payment' && clientSecret && (
         <div>
           <h3>Payment Information</h3>
           <div className="payment-methods">
             <Elements stripe={stripePromise}>
               <PaymentForm
+                clientSecret={clientSecret}
                 orderId={orderId}
-                amount={total}
-                onPaymentSuccess={handlePaymentSuccess}
-                onPaymentError={handlePaymentError}
+                onSuccess={handlePaymentSuccess}
+                onError={handlePaymentError}
               />
             </Elements>
           </div>
