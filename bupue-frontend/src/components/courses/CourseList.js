@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import api from '../../api/client';
 import './Courses.css';
 
 const CourseList = () => {
@@ -11,39 +10,29 @@ const CourseList = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/courses');
+        const response = await api.get('/api/courses');
         setCourses(response.data);
-        setLoading(false);
       } catch (err) {
-        setError('Failed to fetch courses');
+        setError('Failed to load courses');
+      } finally {
         setLoading(false);
       }
     };
-
     fetchCourses();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="courses-container">Loading courses...</div>;
   if (error) return <div className="error">{error}</div>;
 
   return (
     <div className="courses-container">
-      <h2>Available Courses</h2>
-      <div className="courses-grid">
+      <h2>Courses</h2>
+      <div className="course-list">
         {courses.map(course => (
           <div key={course._id} className="course-card">
-            <img src={course.thumbnail} alt={course.title} />
-            <div className="course-info">
-              <h3><Link to={`/courses/${course._id}`}>{course.title}</Link></h3>
-              <p>{course.description}</p>
-              <div className="course-meta">
-                <span>${course.price}</span>
-                <span>{course.rating} ⭐</span>
-              </div>
-              <Link to={`/courses/${course._id}`} className="view-course-btn">
-                View Course
-              </Link>
-            </div>
+            <h3>{course.title}</h3>
+            <p>{course.description}</p>
+            <div className="course-price">${course.price.toFixed(2)}</div>
           </div>
         ))}
       </div>

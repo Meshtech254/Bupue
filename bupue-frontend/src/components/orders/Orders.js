@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../../api/client';
 import './Orders.css';
 
 const Orders = () => {
@@ -10,10 +10,7 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const res = await axios.get('/api/orders/my', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const res = await api.get('/api/orders/my');
         setOrders(res.data);
       } catch (err) {
         setError('Failed to load orders');

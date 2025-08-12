@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../../api/client';
 import { useNavigate } from 'react-router-dom';
 import './Marketplace.css';
 
@@ -26,10 +26,7 @@ const CreateItem = () => {
     setLoading(true);
     setError('');
     try {
-      const token = localStorage.getItem('token');
-      await axios.post('/api/items', form, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.post('/api/items', form);
       navigate('/marketplace');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create item');

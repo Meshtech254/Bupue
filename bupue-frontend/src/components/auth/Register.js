@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../../api/client';
 import { useNavigate } from 'react-router-dom';
 import './Auth.css';
 
@@ -11,6 +11,9 @@ const Register = () => {
     confirmPassword: ''
   });
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [acceptedPolicy, setAcceptedPolicy] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -19,12 +22,18 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!acceptedPolicy) {
+      setError('You must accept the Terms and Conditions to register');
+      return;
+    }
+    
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       return;
     }
     try {
-      const response = await axios.post('/api/auth/register', {
+      const response = await api.post('/api/auth/register', {
         username: formData.username,
         email: formData.email,
         password: formData.password
@@ -61,26 +70,73 @@ const Register = () => {
             required
           />
         </div>
-        <div className="form-group">
+        <div className="form-group password-group">
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             name="password"
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
             required
           />
+          <button
+            type="button"
+            className="password-toggle"
+            onClick={() => setShowPassword(!showPassword)}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            {showPassword ? "👁️" : "👁️‍🗨️"}
+          </button>
         </div>
-        <div className="form-group">
+        <div className="form-group password-group">
           <input
-            type="password"
+            type={showConfirmPassword ? "text" : "password"}
             name="confirmPassword"
             placeholder="Confirm Password"
             value={formData.confirmPassword}
             onChange={handleChange}
             required
           />
+          <button
+            type="button"
+            className="password-toggle"
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+          >
+            {showConfirmPassword ? "👁️" : "👁️‍🗨️"}
+          </button>
         </div>
+        
+        <div className="form-group policy-group">
+          <label className="policy-checkbox">
+            <input
+              type="checkbox"
+              checked={acceptedPolicy}
+              onChange={(e) => setAcceptedPolicy(e.target.checked)}
+              required
+            />
+            <span className="checkmark"></span>
+            I accept the{' '}
+            <a 
+              href="/privacy" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="policy-link"
+            >
+              Terms and Conditions
+            </a>
+            {' '}and{' '}
+            <a 
+              href="/privacy" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="policy-link"
+            >
+              Privacy Policy
+            </a>
+          </label>
+        </div>
+        
         <button type="submit">Register</button>
       </form>
     </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../../api/client';
 import { useNavigate } from 'react-router-dom';
 import './Profile.css';
 
@@ -15,10 +15,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const res = await axios.get('/api/auth/profile', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const res = await api.get('/api/auth/profile');
         setProfile(res.data.user || res.data);
       } catch (err) {
         setError('Failed to load profile');
@@ -42,10 +39,7 @@ const Profile = () => {
   const handleEditSubmit = async e => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('token');
-      const res = await axios.put('/api/auth/profile', editForm, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await api.put('/api/auth/profile', editForm);
       setProfile(res.data);
       setEditing(false);
     } catch (err) {
@@ -56,10 +50,7 @@ const Profile = () => {
   const handleDelete = async () => {
     if (!window.confirm('Are you sure you want to delete your account? This cannot be undone.')) return;
     try {
-      const token = localStorage.getItem('token');
-      await axios.delete('/api/auth/profile', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.delete('/api/auth/profile');
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       navigate('/register');

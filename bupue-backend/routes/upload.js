@@ -97,3 +97,4 @@ router.get('/details/:publicId', auth, async (req, res) => {
 });
 
 module.exports = router;
+

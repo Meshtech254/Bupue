@@ -20,6 +20,7 @@ import { CartProvider } from './context/CartContext';
 import Checkout from './components/cart/Checkout';
 import Orders from './components/orders/Orders';
 import PrivacyPolicy from './components/privacy/PrivacyPolicy';
+import Dashboard from './components/Dashboard';
 
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem('token');
@@ -36,6 +37,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+          <Route path="/cart" element={<PrivateRoute><Cart /></PrivateRoute>} />
           <Route path="/courses" element={<PrivateRoute><CourseList /></PrivateRoute>} />
           <Route
             path="/courses/create"
@@ -49,12 +52,12 @@ function App() {
           <Route path="/events/create" element={<PrivateRoute><CreatePost /></PrivateRoute>} />
           <Route path="/events/:id" element={<PrivateRoute><PostDetail /></PrivateRoute>} />
           <Route path="/courses/:id" element={<PrivateRoute><CourseDetail /></PrivateRoute>} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
           <Route path="/marketplace" element={<PrivateRoute><ItemList /></PrivateRoute>} />
           <Route path="/marketplace/create" element={<PrivateRoute><CreateItem /></PrivateRoute>} />
           <Route path="/marketplace/:id" element={<PrivateRoute><ItemDetail /></PrivateRoute>} />
-          <Route path="/marketplace/checkout" element={<Checkout />} />
-          <Route path="/orders" element={<Orders />} />
+          <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
+          <Route path="/orders" element={<PrivateRoute><Orders /></PrivateRoute>} />
         </Routes>
       </Router>
     </CartProvider>

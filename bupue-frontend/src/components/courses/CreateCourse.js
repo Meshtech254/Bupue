@@ -1,101 +1,48 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import api from '../../api/client';
 import './Courses.css';
 
 const CreateCourse = () => {
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    price: '',
-    thumbnail: null,
-    content: ''
-  });
+  const [form, setForm] = useState({ title: '', description: '', price: '', owner: '' });
+  const [thumbnail, setThumbnail] = useState(null);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setFormData({
-      ...formData,
-      [name]: files ? files[0] : value
-    });
-  };
+  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
+  const handleFileChange = e => setThumbnail(e.target.files[0]);
+
+  const handleSubmit = async e => {
     e.preventDefault();
-    const formDataToSend = new FormData();
-    Object.keys(formData).forEach(key => {
-      formDataToSend.append(key, formData[key]);
-    });
-
+    setLoading(true);
+    setError('');
     try {
-      const token = localStorage.getItem('token');
-      await axios.post('http://localhost:4000/api/courses', formDataToSend, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      navigate('/courses');
+      const formDataToSend = new FormData();
+      formDataToSend.append('title', form.title);
+      formDataToSend.append('description', form.description);
+      formDataToSend.append('price', form.price);
+      if (thumbnail) formDataToSend.append('thumbnail', thumbnail);
+
+      await api.post('/api/courses', formDataToSend);
+      setForm({ title: '', description: '', price: '', owner: '' });
+      setThumbnail(null);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create course');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="create-course-container">
-      <h2>Create New Course</h2>
+    <div className="courses-container">
+      <h2>Create Course</h2>
       {error && <div className="error">{error}</div>}
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <input
-            type="text"
-            name="title"
-            placeholder="Course Title"
-            value={formData.title}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <textarea
-            name="description"
-            placeholder="Course Description"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <input
-            type="number"
-            name="price"
-            placeholder="Course Price"
-            value={formData.price}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <input
-            type="file"
-            name="thumbnail"
-            accept="image/*"
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <textarea
-            name="content"
-            placeholder="Course Content"
-            value={formData.content}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <button type="submit">Create Course</button>
+      <form className="create-course-form" onSubmit={handleSubmit}>
+        <input name="title" placeholder="Title" value={form.title} onChange={handleChange} required />
+        <textarea name="description" placeholder="Description" value={form.description} onChange={handleChange} required />
+        <input name="price" type="number" placeholder="Price" value={form.price} onChange={handleChange} required />
+        <input type="file" onChange={handleFileChange} />
+        <button type="submit" disabled={loading}>{loading ? 'Creating...' : 'Create Course'}</button>
       </form>
     </div>
   );

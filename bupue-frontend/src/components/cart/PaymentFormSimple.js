@@ -98,3 +98,4 @@ const PaymentFormSimple = ({ orderId, amount, onPaymentSuccess, onPaymentError }
 };
 
 export default PaymentFormSimple;
+
