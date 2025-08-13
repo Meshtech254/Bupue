@@ -53,10 +53,73 @@ const userSchema = new mongoose.Schema({
   profile: {
     firstName: String,
     lastName: String,
+    displayName: String,
     bio: String,
     avatar: String,
+    coverBanner: String,
     phone: String,
-    dateOfBirth: Date
+    dateOfBirth: Date,
+    location: String,
+    website: String,
+    socialLinks: {
+      linkedin: String,
+      twitter: String,
+      instagram: String,
+      github: String,
+      portfolio: String
+    },
+    category: {
+      type: String,
+      enum: ['Mentor', 'Entrepreneur', 'Digital Creator', 'Student', 'Professional', 'Other'],
+      default: 'Other'
+    },
+    skills: [String],
+    availability: {
+      type: String,
+      enum: ['Available', 'Busy', 'Away', 'Do Not Disturb'],
+      default: 'Available'
+    },
+    openForCollaborations: {
+      type: Boolean,
+      default: false
+    },
+    openForMentorship: {
+      type: Boolean,
+      default: false
+    },
+    timezone: String,
+    languages: [String],
+    hourlyRate: Number,
+    rating: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 5
+    },
+    reviewCount: {
+      type: Number,
+      default: 0
+    },
+    followers: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }],
+    following: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }],
+    badges: [{
+      name: String,
+      description: String,
+      earnedAt: {
+        type: Date,
+        default: Date.now
+      }
+    }],
+    featuredContent: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Course'
+    }
   }
 });
 

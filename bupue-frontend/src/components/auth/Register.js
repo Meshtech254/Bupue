@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import api from '../../api/client';
+import apiClient from '../../api/client';
 import { useNavigate } from 'react-router-dom';
 import './Auth.css';
 
@@ -14,6 +14,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [acceptedPolicy, setAcceptedPolicy] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -32,16 +33,28 @@ const Register = () => {
       setError('Passwords do not match');
       return;
     }
+    
+    setIsLoading(true);
+    setError('');
+    
     try {
-      const response = await api.post('/api/auth/register', {
+      const response = await apiClient.post('/api/auth/register', {
         username: formData.username,
         email: formData.email,
         password: formData.password
       });
+      console.log('Registration successful:', response.data);
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      console.log('Stored in localStorage:', {
+        token: response.data.token ? 'present' : 'missing',
+        user: response.data.user ? 'present' : 'missing'
+      });
       navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -137,7 +150,9 @@ const Register = () => {
           </label>
         </div>
         
-        <button type="submit">Register</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Registering...' : 'Register'}
+        </button>
       </form>
     </div>
   );

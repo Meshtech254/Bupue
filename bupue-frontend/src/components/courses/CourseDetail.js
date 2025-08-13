@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import apiClient from '../../api/client';
 import './Courses.css';
 
 const CourseDetail = () => {
@@ -18,7 +18,7 @@ const CourseDetail = () => {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const res = await axios.get(`/api/courses/${id}`);
+        const res = await apiClient.get(`/api/courses/${id}`);
         setCourse(res.data);
       } catch (err) {
         setError('Failed to load course');
@@ -44,10 +44,7 @@ const CourseDetail = () => {
   const handleEditSubmit = async e => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('token');
-      await axios.put(`/api/courses/${id}`, editForm, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await apiClient.put(`/api/courses/${id}`, editForm);
       setEditing(false);
       window.location.reload();
     } catch (err) {
@@ -58,10 +55,7 @@ const CourseDetail = () => {
   const handleDelete = async () => {
     if (!window.confirm('Are you sure you want to delete this course?')) return;
     try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`/api/courses/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await apiClient.delete(`/api/courses/${id}`);
       navigate('/courses');
     } catch (err) {
       alert('Failed to delete course');

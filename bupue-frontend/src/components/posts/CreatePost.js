@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import apiClient from '../../api/client';
 import { useNavigate } from 'react-router-dom';
 import './Posts.css';
 
@@ -15,10 +15,7 @@ const CreatePost = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('token');
-      await axios.post('/api/events', form, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await apiClient.post('/api/posts', form);
       navigate('/events');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create event');

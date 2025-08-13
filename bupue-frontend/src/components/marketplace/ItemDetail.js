@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import apiClient from '../../api/client';
 import './Marketplace.css';
 import { useCart } from '../../context/CartContext';
 
@@ -20,7 +20,7 @@ const ItemDetail = () => {
   useEffect(() => {
     const fetchItem = async () => {
       try {
-        const res = await axios.get(`/api/items/${id}`);
+        const res = await apiClient.get(`/api/items/${id}`);
         setItem(res.data);
       } catch (err) {
         setError('Failed to load item');
@@ -59,10 +59,7 @@ const ItemDetail = () => {
   const handleEditSubmit = async e => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('token');
-      await axios.put(`/api/items/${id}`, editForm, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await apiClient.put(`/api/items/${id}`, editForm);
       setEditing(false);
       window.location.reload();
     } catch (err) {
@@ -73,10 +70,7 @@ const ItemDetail = () => {
   const handleDelete = async () => {
     if (!window.confirm('Are you sure you want to delete this item?')) return;
     try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`/api/items/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await apiClient.delete(`/api/items/${id}`);
       navigate('/marketplace');
     } catch (err) {
       alert('Failed to delete item');

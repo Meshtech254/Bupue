@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import apiClient from '../../api/client';
 import './Marketplace.css';
 import { useCart } from '../../context/CartContext';
 
@@ -14,7 +14,7 @@ const ItemList = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const res = await axios.get('/api/items');
+        const res = await apiClient.get('/api/items');
         setItems(res.data);
       } catch (err) {
         setError('Failed to load items');

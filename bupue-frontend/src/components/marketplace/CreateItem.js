@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import api from '../../api/client';
+import apiClient from '../../api/client';
 import { useNavigate } from 'react-router-dom';
 import './Marketplace.css';
 
@@ -26,7 +26,7 @@ const CreateItem = () => {
     setLoading(true);
     setError('');
     try {
-      await api.post('/api/items', form);
+      await apiClient.post('/api/items', form);
       navigate('/marketplace');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create item');

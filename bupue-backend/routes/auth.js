@@ -206,9 +206,46 @@ router.put('/profile', auth, async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    Object.keys(updates).forEach(key => {
-      if (key !== 'password') user[key] = updates[key];
-    });
+    
+    // Handle basic user fields
+    if (updates.username) user.username = updates.username;
+    if (updates.email) user.email = updates.email;
+    
+    // Handle profile fields
+    if (updates.profile) {
+      if (!user.profile) user.profile = {};
+      
+      // Basic profile fields
+      if (updates.profile.firstName !== undefined) user.profile.firstName = updates.profile.firstName;
+      if (updates.profile.lastName !== undefined) user.profile.lastName = updates.profile.lastName;
+      if (updates.profile.displayName !== undefined) user.profile.displayName = updates.profile.displayName;
+      if (updates.profile.bio !== undefined) user.profile.bio = updates.profile.bio;
+      if (updates.profile.avatar !== undefined) user.profile.avatar = updates.profile.avatar;
+      if (updates.profile.coverBanner !== undefined) user.profile.coverBanner = updates.profile.coverBanner;
+      if (updates.profile.phone !== undefined) user.profile.phone = updates.profile.phone;
+      if (updates.profile.dateOfBirth !== undefined) user.profile.dateOfBirth = updates.profile.dateOfBirth;
+      if (updates.profile.location !== undefined) user.profile.location = updates.profile.location;
+      if (updates.profile.website !== undefined) user.profile.website = updates.profile.website;
+      if (updates.profile.category !== undefined) user.profile.category = updates.profile.category;
+      if (updates.profile.skills !== undefined) user.profile.skills = updates.profile.skills;
+      if (updates.profile.availability !== undefined) user.profile.availability = updates.profile.availability;
+      if (updates.profile.openForCollaborations !== undefined) user.profile.openForCollaborations = updates.profile.openForCollaborations;
+      if (updates.profile.openForMentorship !== undefined) user.profile.openForMentorship = updates.profile.openForMentorship;
+      if (updates.profile.timezone !== undefined) user.profile.timezone = updates.profile.timezone;
+      if (updates.profile.languages !== undefined) user.profile.languages = updates.profile.languages;
+      if (updates.profile.hourlyRate !== undefined) user.profile.hourlyRate = updates.profile.hourlyRate;
+      
+      // Social links
+      if (updates.profile.socialLinks) {
+        if (!user.profile.socialLinks) user.profile.socialLinks = {};
+        if (updates.profile.socialLinks.linkedin !== undefined) user.profile.socialLinks.linkedin = updates.profile.socialLinks.linkedin;
+        if (updates.profile.socialLinks.twitter !== undefined) user.profile.socialLinks.twitter = updates.profile.socialLinks.twitter;
+        if (updates.profile.socialLinks.instagram !== undefined) user.profile.socialLinks.instagram = updates.profile.socialLinks.instagram;
+        if (updates.profile.socialLinks.github !== undefined) user.profile.socialLinks.github = updates.profile.socialLinks.github;
+        if (updates.profile.socialLinks.portfolio !== undefined) user.profile.socialLinks.portfolio = updates.profile.socialLinks.portfolio;
+      }
+    }
+    
     await user.save();
     res.json(user);
   } catch (err) {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import api from '../../api/client';
+import apiClient from '../../api/client';
 import './Courses.css';
 
 const CreateCourse = () => {
@@ -17,15 +17,17 @@ const CreateCourse = () => {
     setLoading(true);
     setError('');
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append('title', form.title);
-      formDataToSend.append('description', form.description);
-      formDataToSend.append('price', form.price);
-      if (thumbnail) formDataToSend.append('thumbnail', thumbnail);
+      const courseData = {
+        title: form.title,
+        description: form.description,
+        price: parseFloat(form.price)
+      };
 
-      await api.post('/api/courses', formDataToSend);
+      await apiClient.post('/api/courses', courseData);
       setForm({ title: '', description: '', price: '', owner: '' });
       setThumbnail(null);
+      // Redirect to courses list after successful creation
+      window.location.href = '/courses';
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create course');
     } finally {

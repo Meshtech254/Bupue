@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import api from '../../api/client';
+import apiClient from '../../api/client';
 import { useNavigate } from 'react-router-dom';
 import ReCAPTCHA from 'react-google-recaptcha';
 import './Auth.css';
@@ -12,6 +12,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [captchaToken, setCaptchaToken] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const recaptchaRef = useRef(null);
   const navigate = useNavigate();
 
@@ -36,12 +37,21 @@ const Login = () => {
       return;
     }
     
+    setIsLoading(true);
+    setError('');
+    
     try {
-      const response = await api.post('/api/auth/login', {
+      const response = await apiClient.post('/api/auth/login', {
         ...formData,
         captchaToken
       });
+      console.log('Login successful:', response.data);
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      console.log('Stored in localStorage:', {
+        token: response.data.token ? 'present' : 'missing',
+        user: response.data.user ? 'present' : 'missing'
+      });
       navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
@@ -49,6 +59,8 @@ const Login = () => {
         recaptchaRef.current.reset();
       }
       setCaptchaToken(null);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -97,7 +109,9 @@ const Login = () => {
           />
         </div>
         
-        <button type="submit">Login</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Logging in...' : 'Login'}
+        </button>
       </form>
     </div>
   );

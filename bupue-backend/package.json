@@ -1,31 +1,35 @@
 {
   "name": "bupue-backend",
   "version": "1.0.0",
-  "description": "Backend for Bupue platform",
+  "description": "Backend API for Bupue platform",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": ["api", "backend", "bupue", "education", "marketplace"],
+  "author": "Bupue Team",
+  "license": "ISC",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "cloudinary": "^1.41.0",
-    "multer-storage-cloudinary": "^4.0.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "express-rate-limit": "^6.7.0",
-    "express-validator": "^7.2.1",
-    "helmet": "^6.1.5",
-    "hpp": "^0.2.3",
-    "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.0.3",
+    "mongoose": "^7.5.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "multer": "^1.4.5-lts.1",
-    "nodemailer": "^6.9.7",
-    "stripe": "^14.7.0",
-    "xss-clean": "^0.1.1"
+    "nodemailer": "^6.9.4",
+    "crypto": "^1.0.1",
+    "helmet": "^7.0.0",
+    "express-rate-limit": "^6.10.0",
+    "express-validator": "^7.0.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
   }
 }

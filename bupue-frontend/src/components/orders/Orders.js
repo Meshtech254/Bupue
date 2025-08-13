@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import api from '../../api/client';
+import apiClient from '../../api/client';
 import './Orders.css';
 
 const Orders = () => {
@@ -10,7 +10,7 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await api.get('/api/orders/my');
+        const res = await apiClient.get('/api/orders/my');
         setOrders(res.data);
       } catch (err) {
         setError('Failed to load orders');
