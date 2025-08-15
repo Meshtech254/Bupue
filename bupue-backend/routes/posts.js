@@ -5,10 +5,34 @@ const auth = require('../middleware/auth');
 const User = require('../models/User');
 const Comment = require('../models/Comment');
 
-// Get all posts
+// Get all posts with filters and search
 router.get('/', async (req, res) => {
   try {
-    const posts = await Post.find().populate('author', 'username email').sort({ createdAt: -1 });
+    const { q, category, startDate, endDate, minRating, sort = 'newest' } = req.query;
+    const filter = {};
+    if (q) {
+      filter.$or = [
+        { title: { $regex: q, $options: 'i' } },
+        { body: { $regex: q, $options: 'i' } }
+      ];
+    }
+    if (category) filter.category = category;
+    if (startDate || endDate) {
+      filter.eventDate = {};
+      if (startDate) filter.eventDate.$gte = new Date(startDate);
+      if (endDate) filter.eventDate.$lte = new Date(endDate);
+    }
+    if (minRating) filter.averageRating = { $gte: Number(minRating) };
+
+    const sortMap = {
+      newest: { createdAt: -1 },
+      soonest: { eventDate: 1 },
+      rating_desc: { averageRating: -1, reviewCount: -1 }
+    };
+
+    const posts = await Post.find(filter)
+      .populate('author', 'username email')
+      .sort(sortMap[sort] || sortMap.newest);
     res.json(posts);
   } catch (err) {
     res.status(500).json({ message: 'Failed to fetch posts' });

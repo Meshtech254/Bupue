@@ -120,6 +120,16 @@ const userSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Course'
     }
+  },
+  wishlist: {
+    courses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }],
+    posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
+    items: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Item' }]
+  },
+  activity: {
+    viewedCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }],
+    viewedItems: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Item' }],
+    viewedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }]
   }
 });
 

@@ -8,7 +8,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <Link to="/" className="navbar-logo">
+        <Link to={isLoggedIn ? "/dashboard" : "/"} className="navbar-logo">
           <span className="logo-icon">B</span>
           <span className="logo-text">Bupue</span>
         </Link>
@@ -17,6 +17,7 @@ const Navbar = () => {
             <Link to="/courses">Courses</Link>
             <Link to="/events">Events</Link>
             <Link to="/marketplace">Marketplace</Link>
+            <Link to="/messages">Messages</Link>
           </>
         )}
       </div>

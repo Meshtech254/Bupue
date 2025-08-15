@@ -6,6 +6,9 @@ const itemSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   images: [{ type: String }], // URLs or file paths
+  category: { type: String, default: 'General', index: true },
+  averageRating: { type: Number, default: 0, min: 0, max: 5 },
+  reviewCount: { type: Number, default: 0 }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Item', itemSchema); 

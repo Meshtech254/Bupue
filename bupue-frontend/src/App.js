@@ -21,6 +21,15 @@ import Checkout from './components/cart/Checkout';
 import Orders from './components/orders/Orders';
 import PrivacyPolicy from './components/privacy/PrivacyPolicy';
 import Dashboard from './components/Dashboard';
+import Footer from './components/Footer';
+import About from './components/static/About';
+import Contact from './components/static/Contact';
+import Terms from './components/static/Terms';
+import Refunds from './components/static/Refunds';
+import Guidelines from './components/static/Guidelines';
+import Help from './components/static/Help';
+import Support from './components/static/Support';
+import Messaging from './components/messaging/Messaging';
 
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem('token');
@@ -37,8 +46,16 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/refunds" element={<Refunds />} />
+          <Route path="/guidelines" element={<Guidelines />} />
+          <Route path="/help" element={<Help />} />
+          <Route path="/support" element={<Support />} />
           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
           <Route path="/cart" element={<PrivateRoute><Cart /></PrivateRoute>} />
+          <Route path="/messages" element={<PrivateRoute><Messaging /></PrivateRoute>} />
           <Route path="/courses" element={<PrivateRoute><CourseList /></PrivateRoute>} />
           <Route
             path="/courses/create"
@@ -59,6 +76,7 @@ function App() {
           <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
           <Route path="/orders" element={<PrivateRoute><Orders /></PrivateRoute>} />
         </Routes>
+        <Footer />
       </Router>
     </CartProvider>
   );

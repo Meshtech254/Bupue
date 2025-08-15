@@ -3,10 +3,43 @@ const router = express.Router();
 const Course = require('../models/Course');
 const auth = require('../middleware/auth');
 
-// Get all courses
+// Get all courses with filters and search
 router.get('/', async (req, res) => {
   try {
-    const courses = await Course.find().populate('owner', 'username email').sort({ createdAt: -1 });
+    const {
+      q,
+      category,
+      minPrice,
+      maxPrice,
+      minRating,
+      sort = 'newest'
+    } = req.query;
+
+    const filter = {};
+    if (q) {
+      filter.$or = [
+        { title: { $regex: q, $options: 'i' } },
+        { description: { $regex: q, $options: 'i' } }
+      ];
+    }
+    if (category) filter.category = category;
+    if (minPrice || maxPrice) {
+      filter.price = {};
+      if (minPrice) filter.price.$gte = Number(minPrice);
+      if (maxPrice) filter.price.$lte = Number(maxPrice);
+    }
+    if (minRating) filter.averageRating = { $gte: Number(minRating) };
+
+    const sortMap = {
+      newest: { createdAt: -1 },
+      price_asc: { price: 1 },
+      price_desc: { price: -1 },
+      rating_desc: { averageRating: -1, reviewCount: -1 }
+    };
+
+    const courses = await Course.find(filter)
+      .populate('owner', 'username email')
+      .sort(sortMap[sort] || sortMap.newest);
     res.json(courses);
   } catch (err) {
     res.status(500).json({ message: 'Failed to fetch courses' });

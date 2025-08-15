@@ -10,6 +10,11 @@ const Dashboard = () => {
     posts: 0,
     items: 0
   });
+  const [recommendations, setRecommendations] = useState({
+    courses: [],
+    items: [],
+    posts: []
+  });
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -62,6 +67,21 @@ const Dashboard = () => {
     // fetchUserStats();
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      fetchRecommendations();
+    }
+  }, [user]);
+
+  const fetchRecommendations = async () => {
+    try {
+      const response = await apiClient.get('/api/recommendations');
+      setRecommendations(response.data);
+    } catch (error) {
+      console.error('Failed to fetch recommendations:', error);
+    }
+  };
+
   if (!user) {
     return (
       <div className="dashboard-loading">
@@ -113,6 +133,76 @@ const Dashboard = () => {
           <Link to="/profile" className="action-btn outline">
             View Profile
           </Link>
+        </div>
+      </div>
+
+      <div className="dashboard-recommendations">
+        <h2>For You</h2>
+        <div className="recommendations-grid">
+          {recommendations.courses.length > 0 && (
+            <div className="recommendation-section">
+              <h3>Recommended Courses</h3>
+              <div className="recommendation-items">
+                {recommendations.courses.slice(0, 3).map(course => (
+                  <div key={course._id} className="recommendation-item">
+                    <h4>{course.title}</h4>
+                    <p>{course.description.slice(0, 60)}...</p>
+                    <div className="recommendation-meta">
+                      <span>${course.price}</span>
+                      <span>By {course.owner?.username}</span>
+                    </div>
+                    <Link to={`/courses/${course._id}`} className="recommendation-link">
+                      View Course
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {recommendations.items.length > 0 && (
+            <div className="recommendation-section">
+              <h3>Recommended Items</h3>
+              <div className="recommendation-items">
+                {recommendations.items.slice(0, 3).map(item => (
+                  <div key={item._id} className="recommendation-item">
+                    <h4>{item.title}</h4>
+                    <p>{item.description.slice(0, 60)}...</p>
+                    <div className="recommendation-meta">
+                      <span>${item.price}</span>
+                      <span>By {item.owner?.username}</span>
+                    </div>
+                    <Link to={`/marketplace/${item._id}`} className="recommendation-link">
+                      View Item
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {recommendations.posts.length > 0 && (
+            <div className="recommendation-section">
+              <h3>Upcoming Events</h3>
+              <div className="recommendation-items">
+                {recommendations.posts.slice(0, 3).map(post => (
+                  <div key={post._id} className="recommendation-item">
+                    <h4>{post.title}</h4>
+                    <p>{post.body.slice(0, 60)}...</p>
+                    <div className="recommendation-meta">
+                      <span>By {post.author?.username}</span>
+                      {post.eventDate && (
+                        <span>{new Date(post.eventDate).toLocaleDateString()}</span>
+                      )}
+                    </div>
+                    <Link to={`/events/${post._id}`} className="recommendation-link">
+                      View Event
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
