@@ -9,6 +9,8 @@ const Profile = () => {
   const [error, setError] = useState('');
   const [editing, setEditing] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
+  const [imageModal, setImageModal] = useState({ show: false, type: '', image: '', title: '' });
+  const [imageUpload, setImageUpload] = useState({ file: null, preview: '' });
   const [editForm, setEditForm] = useState({
     username: '',
     email: '',
@@ -178,6 +180,83 @@ const Profile = () => {
     }));
   };
 
+  // Image handling functions
+  const handleImageClick = (type, imageUrl, title) => {
+    setImageModal({
+      show: true,
+      type,
+      image: imageUrl,
+      title
+    });
+  };
+
+  const handleImageEdit = (type) => {
+    setImageModal({
+      show: true,
+      type,
+      image: type === 'avatar' ? profile.profile?.avatar : profile.profile?.coverBanner,
+      title: `Edit ${type === 'avatar' ? 'Profile Picture' : 'Cover Photo'}`
+    });
+  };
+
+  const handleImageUpload = (e, type) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageUpload({ file, preview: URL.createObjectURL(file) });
+      setImageModal({
+        show: true,
+        type,
+        image: URL.createObjectURL(file),
+        title: `Edit ${type === 'avatar' ? 'Profile Picture' : 'Cover Photo'}`
+      });
+    }
+  };
+
+  const saveImage = async () => {
+    if (!imageUpload.file) return;
+
+    try {
+      const formData = new FormData();
+      formData.append('image', imageUpload.file);
+
+      const response = await apiClient.post('/api/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      const imageUrl = response.data.url;
+      
+      // Update the profile with new image
+      const updateData = {
+        profile: {
+          ...editForm.profile,
+          [imageModal.type === 'avatar' ? 'avatar' : 'coverBanner']: imageUrl
+        }
+      };
+
+      const profileResponse = await apiClient.put('/api/auth/profile', updateData);
+      setProfile(profileResponse.data);
+      setEditForm(prev => ({
+        ...prev,
+        profile: {
+          ...prev.profile,
+          [imageModal.type === 'avatar' ? 'avatar' : 'coverBanner']: imageUrl
+        }
+      }));
+
+      // Close modal and reset upload state
+      setImageModal({ show: false, type: '', image: '', title: '' });
+      setImageUpload({ file: null, preview: '' });
+    } catch (error) {
+      console.error('Failed to upload image:', error);
+      alert('Failed to upload image. Please try again.');
+    }
+  };
+
+  const closeImageModal = () => {
+    setImageModal({ show: false, type: '', image: '', title: '' });
+    setImageUpload({ file: null, preview: '' });
+  };
+
   const handleEditSubmit = async e => {
     e.preventDefault();
     try {
@@ -222,13 +301,40 @@ const Profile = () => {
         <img 
           src={profile.profile?.coverBanner || '/default-cover.jpg'} 
           alt="Cover" 
-          className="cover-image"
+          className="cover-image clickable-image"
+          onClick={() => handleImageClick('cover', profile.profile?.coverBanner || '/default-cover.jpg', 'Cover Photo')}
         />
         <div className="cover-overlay">
           <div className="profile-avatar">
             <img 
               src={profile.profile?.avatar || '/default-avatar.jpg'} 
               alt="Avatar" 
+              className="clickable-image"
+              onClick={() => handleImageClick('avatar', profile.profile?.avatar || '/default-avatar.jpg', 'Profile Picture')}
+            />
+            <div className="avatar-edit-overlay">
+              <label htmlFor="avatar-upload" className="avatar-edit-btn">
+                <span>📷</span>
+              </label>
+              <input
+                id="avatar-upload"
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleImageUpload(e, 'avatar')}
+                style={{ display: 'none' }}
+              />
+            </div>
+          </div>
+          <div className="cover-edit-overlay">
+            <label htmlFor="cover-upload" className="cover-edit-btn">
+              <span>📷 Edit Cover</span>
+            </label>
+            <input
+              id="cover-upload"
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleImageUpload(e, 'cover')}
+              style={{ display: 'none' }}
             />
           </div>
         </div>
@@ -680,6 +786,38 @@ const Profile = () => {
               </div>
               {editError && <div className="error">{editError}</div>}
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Image Modal */}
+      {imageModal.show && (
+        <div className="image-modal-overlay" onClick={closeImageModal}>
+          <div className="image-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="image-modal-header">
+              <h3>{imageModal.title}</h3>
+              <button className="close-btn" onClick={closeImageModal}>×</button>
+            </div>
+            <div className="image-modal-content">
+              <img 
+                src={imageModal.image} 
+                alt={imageModal.title}
+                className="modal-image"
+              />
+              {imageUpload.file && (
+                <div className="image-upload-actions">
+                  <p>New image selected. Click save to update your profile.</p>
+                  <div className="image-upload-buttons">
+                    <button onClick={saveImage} className="save-image-btn">
+                      Save Image
+                    </button>
+                    <button onClick={closeImageModal} className="cancel-image-btn">
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
