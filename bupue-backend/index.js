@@ -15,6 +15,7 @@ const reviewsRoutes = require('./routes/reviews');
 const wishlistRoutes = require('./routes/wishlist');
 const messagesRoutes = require('./routes/messages');
 const recommendationsRoutes = require('./routes/recommendations');
+const usersRoutes = require('./routes/users');
 
 // Load environment variables with absolute path
 const envPath = path.resolve(__dirname, '.env');
@@ -59,6 +60,7 @@ app.use('/api/reviews', reviewsRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/messages', messagesRoutes);
 app.use('/api/recommendations', recommendationsRoutes);
+app.use('/api/users', usersRoutes);
 
 // MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/bupue';

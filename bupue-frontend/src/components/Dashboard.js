@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import apiClient from '../api/client';
+import FollowSuggestions from './FollowSuggestions';
 import './Dashboard.css';
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
   const [stats, setStats] = useState({
     courses: 0,
-    posts: 0,
-    items: 0
+    events: 0,
+    marketplace: 0,
+    followers: 0,
+    following: 0
   });
   const [recommendations, setRecommendations] = useState({
     courses: [],
@@ -62,9 +65,7 @@ const Dashboard = () => {
     };
 
     fetchUserData();
-
-    // Fetch user stats (you can implement this later)
-    // fetchUserStats();
+    fetchUserStats();
   }, []);
 
   useEffect(() => {
@@ -72,6 +73,22 @@ const Dashboard = () => {
       fetchRecommendations();
     }
   }, [user]);
+
+  const fetchUserStats = async () => {
+    try {
+      // For now, we'll use mock data until we implement the stats API
+      // Later, you can replace this with actual API calls
+      setStats({
+        courses: 0,
+        events: 0,
+        marketplace: 0,
+        followers: user?.profile?.followers?.length || 0,
+        following: user?.profile?.following?.length || 0
+      });
+    } catch (error) {
+      console.error('Failed to fetch user stats:', error);
+    }
+  };
 
   const fetchRecommendations = async () => {
     try {
@@ -102,38 +119,68 @@ const Dashboard = () => {
 
       <div className="dashboard-stats">
         <div className="stat-card">
-          <h3>Courses</h3>
-          <p className="stat-number">{stats.courses}</p>
-          <Link to="/courses" className="stat-link">View Courses</Link>
+          <div className="stat-icon">🎓</div>
+          <div className="stat-content">
+            <h3>Courses</h3>
+            <p className="stat-number">{stats.courses}</p>
+            <p className="stat-description">Available courses</p>
+          </div>
+          <Link to="/courses" className="stat-link">Browse Courses</Link>
         </div>
         <div className="stat-card">
-          <h3>Events</h3>
-          <p className="stat-number">{stats.posts}</p>
+          <div className="stat-icon">📅</div>
+          <div className="stat-content">
+            <h3>Events</h3>
+            <p className="stat-number">{stats.events}</p>
+            <p className="stat-description">Upcoming events</p>
+          </div>
           <Link to="/events" className="stat-link">View Events</Link>
         </div>
         <div className="stat-card">
-          <h3>Marketplace</h3>
-          <p className="stat-number">{stats.items}</p>
-          <Link to="/marketplace" className="stat-link">View Marketplace</Link>
+          <div className="stat-icon">🛍️</div>
+          <div className="stat-content">
+            <h3>Marketplace</h3>
+            <p className="stat-number">{stats.marketplace}</p>
+            <p className="stat-description">Items for sale</p>
+          </div>
+          <Link to="/marketplace" className="stat-link">Explore Marketplace</Link>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon">👥</div>
+          <div className="stat-content">
+            <h3>Network</h3>
+            <p className="stat-number">{stats.followers}</p>
+            <p className="stat-description">Followers</p>
+          </div>
+          <Link to="/profile" className="stat-link">View Profile</Link>
         </div>
       </div>
 
       <div className="dashboard-actions">
         <h2>Quick Actions</h2>
+        <p className="actions-description">Start creating content or explore the platform</p>
         <div className="action-buttons">
           <Link to="/courses/create" className="action-btn primary">
+            <span className="action-icon">➕</span>
             Create Course
           </Link>
           <Link to="/events/create" className="action-btn secondary">
+            <span className="action-icon">📅</span>
             Create Event
           </Link>
           <Link to="/marketplace/create" className="action-btn secondary">
+            <span className="action-icon">🛍️</span>
             Add Item
           </Link>
           <Link to="/profile" className="action-btn outline">
+            <span className="action-icon">👤</span>
             View Profile
           </Link>
         </div>
+      </div>
+
+      <div className="dashboard-sidebar">
+        <FollowSuggestions />
       </div>
 
       <div className="dashboard-recommendations">

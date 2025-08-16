@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import SearchBar from './SearchBar';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -20,6 +21,7 @@ const Navbar = () => {
             <Link to="/messages">Messages</Link>
           </>
         )}
+        {isLoggedIn && <SearchBar />}
       </div>
       <div className="navbar-right">
         <Link to="/privacy" className="privacy-link">Privacy</Link>

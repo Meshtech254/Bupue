@@ -8,12 +8,14 @@
   position: sticky;
   top: 0;
   z-index: 1000;
+  gap: 2rem;
 }
 
 .navbar-left {
   display: flex;
   align-items: center;
   gap: 2rem;
+  flex: 1;
 }
 
 .navbar-right {

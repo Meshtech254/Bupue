@@ -30,6 +30,9 @@ import Guidelines from './components/static/Guidelines';
 import Help from './components/static/Help';
 import Support from './components/static/Support';
 import Messaging from './components/messaging/Messaging';
+import UserProfile from './components/UserProfile';
+import AdminDashboard from './components/admin/AdminDashboard';
+import AdminErrorBoundary from './components/admin/AdminErrorBoundary';
 
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem('token');
@@ -70,6 +73,8 @@ function App() {
           <Route path="/events/:id" element={<PrivateRoute><PostDetail /></PrivateRoute>} />
           <Route path="/courses/:id" element={<PrivateRoute><CourseDetail /></PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+          <Route path="/profile/:userId" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
+        <Route path="/admin" element={<PrivateRoute><AdminErrorBoundary><AdminDashboard /></AdminErrorBoundary></PrivateRoute>} />
           <Route path="/marketplace" element={<PrivateRoute><ItemList /></PrivateRoute>} />
           <Route path="/marketplace/create" element={<PrivateRoute><CreateItem /></PrivateRoute>} />
           <Route path="/marketplace/:id" element={<PrivateRoute><ItemDetail /></PrivateRoute>} />
