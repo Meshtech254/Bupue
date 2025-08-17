@@ -11,8 +11,13 @@ const adminAuth = async (req, res, next) => {
       return res.status(401).json({ message: 'Authentication required' });
     }
 
-    // Check if user is admin
-    if (!req.user.isAdmin) {
+    // Check if user is admin (trust middleware but also verify from DB)
+    if (req.user.isAdmin) {
+      return next();
+    }
+
+    const freshUser = await User.findById(req.user._id).select('isAdmin');
+    if (!freshUser || !freshUser.isAdmin) {
       return res.status(403).json({ message: 'Admin access required' });
     }
 
