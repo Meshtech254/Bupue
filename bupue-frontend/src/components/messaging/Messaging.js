@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import apiClient from '../../api/client';
 import './Messaging.css';
 
@@ -9,11 +9,7 @@ const Messaging = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    fetchThreads();
-  }, []);
-
-  const fetchThreads = async () => {
+  const fetchThreads = useCallback(async () => {
     try {
       setLoading(true);
       const response = await apiClient.get('/api/messages');
@@ -26,7 +22,13 @@ const Messaging = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedThread]);
+
+  useEffect(() => {
+    fetchThreads();
+  }, [fetchThreads]);
+
+
 
   const sendMessage = async (e) => {
     e.preventDefault();

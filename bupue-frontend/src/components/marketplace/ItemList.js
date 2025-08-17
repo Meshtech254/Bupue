@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import apiClient from '../../api/client';
 import FilterBar from '../FilterBar';
@@ -14,19 +14,13 @@ const ItemList = () => {
   const { cart, updateQuantity, removeFromCart, clearCart } = useCart();
   const total = cart.reduce((sum, i) => sum + i.item.price * i.quantity, 0);
 
-  useEffect(() => {
-    fetchItems();
-  }, [filters]);
-
-  const fetchItems = async () => {
+  const fetchItems = useCallback(async () => {
     try {
       setLoading(true);
       const queryParams = new URLSearchParams();
-      
       Object.entries(filters).forEach(([key, value]) => {
         if (value) queryParams.append(key, value);
       });
-
       const res = await apiClient.get(`/api/items?${queryParams.toString()}`);
       setItems(res.data);
     } catch (err) {
@@ -34,7 +28,13 @@ const ItemList = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
+
+  useEffect(() => {
+    fetchItems();
+  }, [fetchItems]);
+
+
 
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);

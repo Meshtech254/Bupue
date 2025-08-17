@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link, Routes, Route } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import apiClient from '../../api/client';
 import './Admin.css';
 
@@ -14,14 +14,10 @@ const AdminDashboard = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    fetchAdminStats();
-  }, []);
-
-  const fetchAdminStats = async () => {
+  const fetchAdminStats = useCallback(async () => {
     try {
       // Try to fetch real stats from admin API
-      const response = await apiClient.get('/admin/stats');
+             const response = await apiClient.get('/api/admin/stats');
       setStats(response.data);
     } catch (error) {
       console.error('Error fetching admin stats:', error);
@@ -37,7 +33,11 @@ const AdminDashboard = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchAdminStats();
+  }, [fetchAdminStats]);
 
   if (isLoading) {
     return <div className="admin-loading">Loading admin dashboard...</div>;
