@@ -32,7 +32,7 @@ router.get('/stats', auth, adminAuth, async (req, res) => {
     // For now, we'll return basic stats
     // Later we can add courses, posts, items counts
     res.json({
-      totalUsers,
+        totalUsers,
       activeUsers,
       bannedUsers,
       totalCourses: 0,

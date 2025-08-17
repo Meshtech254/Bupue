@@ -11,7 +11,7 @@ const FollowSuggestions = () => {
   useEffect(() => {
     const fetchSuggestions = async () => {
       try {
-        const response = await apiClient.get('/users/suggestions/follow');
+        const response = await apiClient.get('/api/users/suggestions/follow');
         setSuggestions(response.data);
       } catch (error) {
         console.error('Error fetching follow suggestions:', error);
@@ -26,7 +26,7 @@ const FollowSuggestions = () => {
   const handleFollow = async (userId, e) => {
     e.stopPropagation();
     try {
-      await apiClient.post(`/users/${userId}/follow`);
+      await apiClient.post(`/api/users/${userId}/follow`);
       // Remove the user from suggestions after following
       setSuggestions(prev => prev.filter(user => user._id !== userId));
     } catch (error) {
@@ -92,3 +92,7 @@ const FollowSuggestions = () => {
 };
 
 export default FollowSuggestions;
+
+
+
+
