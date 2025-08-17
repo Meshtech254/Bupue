@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import apiClient from '../../api/client';
 import FilterBar from '../FilterBar';
@@ -11,19 +11,13 @@ const CourseList = () => {
   const [error, setError] = useState('');
   const [filters, setFilters] = useState({});
 
-  useEffect(() => {
-    fetchCourses();
-  }, [filters]);
-
-  const fetchCourses = async () => {
+  const fetchCourses = useCallback(async () => {
     try {
       setLoading(true);
       const queryParams = new URLSearchParams();
-      
       Object.entries(filters).forEach(([key, value]) => {
         if (value) queryParams.append(key, value);
       });
-
       const response = await apiClient.get(`/api/courses?${queryParams.toString()}`);
       setCourses(response.data);
     } catch (err) {
@@ -31,7 +25,13 @@ const CourseList = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
+
+  useEffect(() => {
+    fetchCourses();
+  }, [fetchCourses]);
+
+
 
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);

@@ -17,16 +17,26 @@ const CreateCourse = () => {
     setLoading(true);
     setError('');
     try {
+      let thumbnailUrl = '';
+      if (thumbnail) {
+        const formData = new FormData();
+        formData.append('image', thumbnail);
+                 const uploadRes = await apiClient.post('/api/upload/single', formData, {
+           headers: { 'Content-Type': 'multipart/form-data' }
+         });
+        thumbnailUrl = uploadRes.data?.file?.url || uploadRes.data?.url || '';
+      }
+
       const courseData = {
         title: form.title,
         description: form.description,
-        price: parseFloat(form.price)
+        price: parseFloat(form.price),
+        thumbnail: thumbnailUrl
       };
 
       await apiClient.post('/api/courses', courseData);
       setForm({ title: '', description: '', price: '', owner: '' });
       setThumbnail(null);
-      // Redirect to courses list after successful creation
       window.location.href = '/courses';
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create course');
@@ -43,7 +53,19 @@ const CreateCourse = () => {
         <input name="title" placeholder="Title" value={form.title} onChange={handleChange} required />
         <textarea name="description" placeholder="Description" value={form.description} onChange={handleChange} required />
         <input name="price" type="number" placeholder="Price" value={form.price} onChange={handleChange} required />
-        <input type="file" onChange={handleFileChange} />
+        <input type="file" accept="image/*" onChange={handleFileChange} />
+        {thumbnail && (
+          <div style={{ marginTop: 8 }}>
+            <strong>Thumbnail preview:</strong>
+            <div>
+              <img
+                src={URL.createObjectURL(thumbnail)}
+                alt="Thumbnail preview"
+                style={{ width: 160, height: 'auto', borderRadius: 6, marginTop: 6 }}
+              />
+            </div>
+          </div>
+        )}
         <button type="submit" disabled={loading}>{loading ? 'Creating...' : 'Create Course'}</button>
       </form>
     </div>

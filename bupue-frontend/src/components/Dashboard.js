@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import apiClient from '../api/client';
 import FollowSuggestions from './FollowSuggestions';
@@ -19,65 +19,37 @@ const Dashboard = () => {
     posts: []
   });
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      // Get user info from localStorage
-      const token = localStorage.getItem('token');
-      const userInfo = localStorage.getItem('user');
-      
-      console.log('Dashboard useEffect - Token:', token ? 'present' : 'missing');
-      console.log('Dashboard useEffect - User info:', userInfo ? 'present' : 'missing');
-      
-      if (userInfo) {
-        try {
-          const parsedUser = JSON.parse(userInfo);
-          console.log('Parsed user data:', parsedUser);
-          setUser(parsedUser);
-        } catch (error) {
-          console.error('Error parsing user info:', error);
-          // If user data is corrupted, redirect to login
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          window.location.href = '/login';
-        }
-      } else if (token) {
-        // If we have a token but no user data, try to fetch user data
-        // This could happen if the user data was cleared but token remains
-        console.log('Token exists but no user data found, fetching from backend...');
-        try {
-          const response = await apiClient.get('/api/auth/me');
-          const userData = response.data;
-          console.log('Fetched user data from backend:', userData);
-          localStorage.setItem('user', JSON.stringify(userData));
-          setUser(userData);
-        } catch (error) {
-          console.error('Failed to fetch user data:', error);
-          // If we can't fetch user data, the token might be invalid
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          window.location.href = '/login';
-        }
-      } else {
-        // No token or user data, redirect to login
-        console.log('No token or user data found, redirecting to login');
+  const fetchUserData = useCallback(async () => {
+    const token = localStorage.getItem('token');
+    const userInfo = localStorage.getItem('user');
+
+    if (userInfo) {
+      try {
+        const parsedUser = JSON.parse(userInfo);
+        setUser(parsedUser);
+      } catch (error) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
         window.location.href = '/login';
       }
-    };
-
-    fetchUserData();
-    fetchUserStats();
+    } else if (token) {
+      try {
+        const response = await apiClient.get('/api/auth/me');
+        const userData = response.data;
+        localStorage.setItem('user', JSON.stringify(userData));
+        setUser(userData);
+      } catch (error) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+      }
+    } else {
+      window.location.href = '/login';
+    }
   }, []);
 
-  useEffect(() => {
-    if (user) {
-      fetchRecommendations();
-    }
-  }, [user]);
-
-  const fetchUserStats = async () => {
+  const fetchUserStats = useCallback(async () => {
     try {
-      // For now, we'll use mock data until we implement the stats API
-      // Later, you can replace this with actual API calls
       setStats({
         courses: 0,
         events: 0,
@@ -88,16 +60,29 @@ const Dashboard = () => {
     } catch (error) {
       console.error('Failed to fetch user stats:', error);
     }
-  };
+  }, [user]);
 
-  const fetchRecommendations = async () => {
+  useEffect(() => {
+    fetchUserData();
+    fetchUserStats();
+  }, [fetchUserData, fetchUserStats]);
+
+  const fetchRecommendations = useCallback(async () => {
     try {
       const response = await apiClient.get('/api/recommendations');
       setRecommendations(response.data);
     } catch (error) {
       console.error('Failed to fetch recommendations:', error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchRecommendations();
+    }
+  }, [user, fetchRecommendations]);
+
+
 
   if (!user) {
     return (

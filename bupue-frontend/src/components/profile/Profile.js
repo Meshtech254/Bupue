@@ -219,11 +219,11 @@ const Profile = () => {
       const formData = new FormData();
       formData.append('image', imageUpload.file);
 
-      const response = await apiClient.post('/api/upload', formData, {
+      const response = await apiClient.post('/api/upload/single', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
-      const imageUrl = response.data.url;
+      const imageUrl = response.data?.file?.url || response.data?.url;
       
       // Update the profile with new image
       const updateData = {
@@ -316,6 +316,9 @@ const Profile = () => {
               <label htmlFor="avatar-upload" className="avatar-edit-btn">
                 <span>📷</span>
               </label>
+              <button type="button" className="avatar-inline-edit" onClick={() => handleImageEdit('avatar')}>
+                Edit
+              </button>
               <input
                 id="avatar-upload"
                 type="file"
@@ -329,6 +332,9 @@ const Profile = () => {
             <label htmlFor="cover-upload" className="cover-edit-btn">
               <span>📷 Edit Cover</span>
             </label>
+            <button type="button" className="cover-inline-edit" onClick={() => handleImageEdit('cover')}>
+              Edit
+            </button>
             <input
               id="cover-upload"
               type="file"
