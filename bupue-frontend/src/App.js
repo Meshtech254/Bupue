@@ -74,7 +74,7 @@ function App() {
           <Route path="/courses/:id" element={<PrivateRoute><CourseDetail /></PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
           <Route path="/profile/:userId" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
-        <Route path="/admin" element={<PrivateRoute><AdminErrorBoundary><AdminDashboard /></AdminErrorBoundary></PrivateRoute>} />
+                  <Route path="/admin/*" element={<PrivateRoute><AdminErrorBoundary><AdminDashboard /></AdminErrorBoundary></PrivateRoute>} />
           <Route path="/marketplace" element={<PrivateRoute><ItemList /></PrivateRoute>} />
           <Route path="/marketplace/create" element={<PrivateRoute><CreateItem /></PrivateRoute>} />
           <Route path="/marketplace/:id" element={<PrivateRoute><ItemDetail /></PrivateRoute>} />

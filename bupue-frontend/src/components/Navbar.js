@@ -5,6 +5,10 @@ import './Navbar.css';
 
 const Navbar = () => {
   const isLoggedIn = !!localStorage.getItem('token');
+  const user = (() => {
+    try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
+  })();
+  const isAdmin = !!user?.isAdmin;
 
   return (
     <nav className="navbar">
@@ -19,6 +23,7 @@ const Navbar = () => {
             <Link to="/events">Events</Link>
             <Link to="/marketplace">Marketplace</Link>
             <Link to="/messages">Messages</Link>
+            {isAdmin && <Link to="/admin">Admin</Link>}
           </>
         )}
         {isLoggedIn && <SearchBar />}
