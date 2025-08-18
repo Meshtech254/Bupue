@@ -84,7 +84,8 @@ const Footer = () => {
             <span>M-Pesa</span>
             <span>PayPal</span>
           </div>
-          <p className="copyright">© 2025 Bupue. All Rights Reserved.</p>
+          
+
           {/* Optional: Verification badges explanation */}
           {/* <p className="verification-info">Verified creators & sellers</p> */}
         </div>
@@ -97,7 +98,9 @@ const Footer = () => {
           <span>Trending Courses: <Link to="/courses?category=web-dev">Web Development</Link>, <Link to="/courses?category=digital-marketing">Digital Marketing</Link></span>
           <span>Upcoming Events: <Link to="/events?type=pitch-nights">Startup Pitch Nights</Link>, <Link to="/events?type=creator-meetups">Creator Meetups</Link></span>
         </div>
+        
       </div>
+      <p className="copyright">© 2025 Bupue. All Rights Reserved.</p>
     </footer>
   );
 };

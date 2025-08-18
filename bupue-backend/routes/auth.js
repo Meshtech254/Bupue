@@ -68,7 +68,8 @@ router.post('/register', async (req, res) => {
         id: user._id,
         username: user.username,
         email: user.email,
-        isEmailVerified: user.isEmailVerified
+        isEmailVerified: user.isEmailVerified,
+        isAdmin: user.isAdmin
       },
       message: 'Registration successful. Please check your email to verify your account.'
     });
@@ -163,7 +164,8 @@ router.post('/login', async (req, res) => {
         user: {
           id: user._id,
           username: user.username,
-          email: user.email
+            email: user.email,
+          isAdmin: user.isAdmin
         }
       });
     } catch (tokenError) {

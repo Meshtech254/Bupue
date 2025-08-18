@@ -4,6 +4,14 @@ import apiClient from '../../api/client';
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+   const isAdminUser = (() => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user') || 'null');
+      return !!user?.isAdmin;
+    } catch (e) {
+      return false;
+    }
+  })();
 
   useEffect(() => {
     fetchUsers();
@@ -14,7 +22,7 @@ const UserManagement = () => {
       setIsLoading(true);
       // Try admin endpoint first, fallback to regular search
       try {
-        const response = await apiClient.get('/admin/users?limit=50');
+        const response = await apiClient.get('/api/admin/users?limit=50');
         setUsers(response.data.users || []);
       } catch (adminError) {
         console.log('Admin endpoint not available, using regular search');
@@ -30,7 +38,7 @@ const UserManagement = () => {
 
   const handleBanUser = async (userId) => {
     try {
-      await apiClient.post(`/admin/users/${userId}/ban`);
+      await apiClient.post(`/api/admin/users/${userId}/ban`);
       setUsers(prev => prev.map(user => 
         user._id === userId ? { ...user, banned: true } : user
       ));
@@ -42,7 +50,7 @@ const UserManagement = () => {
 
   const handleUnbanUser = async (userId) => {
     try {
-      await apiClient.post(`/admin/users/${userId}/unban`);
+      await apiClient.post(`/api/admin/users/${userId}/unban`);
       setUsers(prev => prev.map(user => 
         user._id === userId ? { ...user, banned: false } : user
       ));
@@ -97,20 +105,24 @@ const UserManagement = () => {
                 </td>
                 <td>
                   <div className="user-actions">
-                    {user.banned ? (
-                      <button 
-                        className="unban-btn"
-                        onClick={() => handleUnbanUser(user._id)}
-                      >
-                        Unban
-                      </button>
+                                   {isAdminUser ? (
+                      user.banned ? (
+                        <button 
+                          className="unban-btn"
+                          onClick={() => handleUnbanUser(user._id)}
+                        >
+                          Unban
+                        </button>
+                      ) : (
+                        <button 
+                          className="ban-btn"
+                          onClick={() => handleBanUser(user._id)}
+                        >
+                          Ban
+                        </button>
+                      )
                     ) : (
-                      <button 
-                        className="ban-btn"
-                        onClick={() => handleBanUser(user._id)}
-                      >
-                        Ban
-                      </button>
+                      <span>-</span>
                     )}
                   </div>
                 </td>

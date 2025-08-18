@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, Routes, Route } from 'react-router-dom';
 import apiClient from '../../api/client';
 import './Admin.css';
+import UserManagement from './UserManagement';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -13,6 +14,15 @@ const AdminDashboard = () => {
     pendingApprovals: 0
   });
   const [isLoading, setIsLoading] = useState(true);
+  
+  const isAdminUser = (() => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user') || 'null');
+      return !!user?.isAdmin;
+    } catch {
+      return false;
+    }
+  })();
 
   useEffect(() => {
     fetchAdminStats();
@@ -21,7 +31,7 @@ const AdminDashboard = () => {
   const fetchAdminStats = async () => {
     try {
       // Try to fetch real stats from admin API
-      const response = await apiClient.get('/admin/stats');
+      const response = await apiClient.get('/api/admin/stats');
       setStats(response.data);
     } catch (error) {
       console.error('Error fetching admin stats:', error);
@@ -38,6 +48,10 @@ const AdminDashboard = () => {
       setIsLoading(false);
     }
   };
+  
+  if (!isAdminUser) {
+    return <div className="admin-loading">Access denied. Admins only.</div>;
+  }
 
   if (isLoading) {
     return <div className="admin-loading">Loading admin dashboard...</div>;
@@ -79,7 +93,13 @@ const AdminDashboard = () => {
 
         {/* Main Content Area */}
         <div className="admin-main">
-          <AdminOverview stats={stats} />
+                    <Routes>
+            <Route path="/admin" element={<AdminOverview stats={stats} />} />
+            <Route path="/admin/users" element={<UserManagement />} />
+            <Route path="/admin/content" element={<div>Content management coming soon.</div>} />
+            <Route path="/admin/analytics" element={<div>Analytics coming soon.</div>} />
+            <Route path="/admin/settings" element={<div>System settings coming soon.</div>} />
+          </Routes>
         </div>
       </div>
           </div>
