@@ -59,17 +59,17 @@ const CourseList = () => {
           <Link to="/courses/create" className="create-course-btn">Create the first course!</Link>
         </div>
       ) : (
-        <div className="course-list">
+        <div className="courses-grid">
           {courses.map(course => (
             <div key={course._id} className="course-card">
-              <div className="course-header">
+              {course.thumbnailUrl && <img src={course.thumbnailUrl} alt={course.title} />}
+              <div className="course-info">
                 <h3>{course.title}</h3>
-                <WishlistButton type="courses" itemId={course._id} />
-              </div>
-              <p>{course.description}</p>
-              <div className="course-meta">
-                <div className="course-price">${course.price.toFixed(2)}</div>
-                <div className="course-owner">By {course.owner?.username || 'Unknown'}</div>
+                <p>{course.shortDescription}</p>
+                <div className="course-meta">
+                  <span>{course.price === 0 ? 'Free' : `$${course.price.toFixed(2)}`}</span>
+                  <span>By {course.owner?.profile?.displayName || course.owner?.username || 'Unknown'}</span>
+                </div>
                 {course.averageRating > 0 && (
                   <div className="course-rating">
                     {'★'.repeat(Math.round(course.averageRating))}
@@ -78,11 +78,14 @@ const CourseList = () => {
                     </span>
                   </div>
                 )}
-                {course.category && (
-                  <div className="course-category">{course.category}</div>
-                )}
+                <div className="tags">
+                  {(course.tags || []).slice(0, 3).map((t, i) => (
+                    <span key={i} className="badge">{t}</span>
+                  ))}
+                </div>
+                {course.verifiedInstructor && <div className="badge">Verified</div>}
+                <Link to={`/courses/${course._id}`} className="view-course-btn">View Details</Link>
               </div>
-              <Link to={`/courses/${course._id}`} className="view-course-btn">View Details</Link>
             </div>
           ))}
         </div>
