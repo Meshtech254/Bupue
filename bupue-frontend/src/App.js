@@ -10,6 +10,7 @@ import PostList from './components/posts/PostList';
 import CreatePost from './components/posts/CreatePost';
 import PostDetail from './components/posts/PostDetail';
 import CourseDetail from './components/courses/CourseDetail';
+import CourseLearn from './components/courses/CourseLearn';
 import Profile from './components/profile/Profile';
 import Navbar from './components/Navbar';
 import ItemList from './components/marketplace/ItemList';
@@ -62,21 +63,14 @@ function App() {
           <Route path="/cart" element={<PrivateRoute><Cart /></PrivateRoute>} />
           <Route path="/messages" element={<PrivateRoute><Messaging /></PrivateRoute>} />
           <Route path="/courses" element={<PrivateRoute><CourseList /></PrivateRoute>} />
-          <Route
-            path="/courses/create"
-            element={
-              <PrivateRoute>
-                <CreateCourse />
-              </PrivateRoute>
-            }
-          />
+          <Route path="/courses/create" element={<PrivateRoute><CreateCourse /></PrivateRoute>} />
           <Route path="/events" element={<PrivateRoute><PostList /></PrivateRoute>} />
           <Route path="/events/create" element={<PrivateRoute><CreatePost /></PrivateRoute>} />
           <Route path="/events/:id" element={<PrivateRoute><PostDetail /></PrivateRoute>} />
           <Route path="/courses/:id" element={<PrivateRoute><CourseDetail /></PrivateRoute>} />
+          <Route path="/courses/:id/learn" element={<PrivateRoute><CourseLearn /></PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
           <Route path="/profile/:userId" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
-
           <Route
             path="/admin/*"
             element={
@@ -93,7 +87,6 @@ function App() {
             <Route path="analytics" element={<div>Analytics coming soon.</div>} />
             <Route path="settings" element={<div>System settings coming soon.</div>} />
           </Route>
-
           <Route path="/marketplace" element={<PrivateRoute><ItemList /></PrivateRoute>} />
           <Route path="/marketplace/create" element={<PrivateRoute><CreateItem /></PrivateRoute>} />
           <Route path="/marketplace/:id" element={<PrivateRoute><ItemDetail /></PrivateRoute>} />

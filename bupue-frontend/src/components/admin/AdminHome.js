@@ -15,9 +15,9 @@ const AdminHome = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await apiClient.get('/api/admin/stats');
-        setStats(res.data);
-      } catch (err) {
+        const response = await apiClient.get('/api/admin/stats');
+        setStats(response.data);
+      } catch (error) {
         setStats({
           totalUsers: 8,
           totalCourses: 0,
