@@ -114,7 +114,6 @@ const Dashboard = () => {
     <div className="dashboard">
       <div className="dashboard-header">
         <h1>Welcome back, {user.username || 'User'}! 👋</h1>
-        <p>Here's what's happening on your Bupue platform</p>
       </div>
 
       <div className="dashboard-stats">
@@ -123,56 +122,43 @@ const Dashboard = () => {
           <div className="stat-content">
             <h3>Courses</h3>
             <p className="stat-number">{stats.courses}</p>
-            <p className="stat-description">Available courses</p>
           </div>
-          <Link to="/courses" className="stat-link">Browse Courses</Link>
+          <Link to="/courses" className="stat-link">View Details</Link>
         </div>
         <div className="stat-card">
           <div className="stat-icon">📅</div>
           <div className="stat-content">
             <h3>Events</h3>
             <p className="stat-number">{stats.events}</p>
-            <p className="stat-description">Upcoming events</p>
           </div>
-          <Link to="/events" className="stat-link">View Events</Link>
+          <Link to="/events" className="stat-link">View Details</Link>
         </div>
         <div className="stat-card">
           <div className="stat-icon">🛍️</div>
           <div className="stat-content">
             <h3>Marketplace</h3>
             <p className="stat-number">{stats.marketplace}</p>
-            <p className="stat-description">Items for sale</p>
           </div>
-          <Link to="/marketplace" className="stat-link">Explore Marketplace</Link>
-        </div>
-        <div className="stat-card">
-          <div className="stat-icon">👥</div>
-          <div className="stat-content">
-            <h3>Network</h3>
-            <p className="stat-number">{stats.followers}</p>
-            <p className="stat-description">Followers</p>
-          </div>
-          <Link to="/profile" className="stat-link">View Profile</Link>
+          <Link to="/marketplace" className="stat-link">View Marketplace</Link>
         </div>
       </div>
 
       <div className="dashboard-actions">
         <h2>Quick Actions</h2>
-        <p className="actions-description">Start creating content or explore the platform</p>
         <div className="action-buttons">
           <Link to="/courses/create" className="action-btn primary">
             <span className="action-icon">➕</span>
             Create Course
           </Link>
-          <Link to="/events/create" className="action-btn secondary">
+          <Link to="/events/create" className="action-btn teal">
             <span className="action-icon">📅</span>
-            Create Event
+            Launch Event
           </Link>
-          <Link to="/marketplace/create" className="action-btn secondary">
+          <Link to="/marketplace/create" className="action-btn green">
             <span className="action-icon">🛍️</span>
             Add Item
           </Link>
-          <Link to="/profile" className="action-btn outline">
+          <Link to="/profile" className="action-btn gray">
             <span className="action-icon">👤</span>
             View Profile
           </Link>
