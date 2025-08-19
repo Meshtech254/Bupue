@@ -21,45 +21,30 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      // Get user info from localStorage
       const token = localStorage.getItem('token');
       const userInfo = localStorage.getItem('user');
-      
-      console.log('Dashboard useEffect - Token:', token ? 'present' : 'missing');
-      console.log('Dashboard useEffect - User info:', userInfo ? 'present' : 'missing');
-      
+
       if (userInfo) {
         try {
           const parsedUser = JSON.parse(userInfo);
-          console.log('Parsed user data:', parsedUser);
           setUser(parsedUser);
         } catch (error) {
-          console.error('Error parsing user info:', error);
-          // If user data is corrupted, redirect to login
           localStorage.removeItem('token');
           localStorage.removeItem('user');
           window.location.href = '/login';
         }
       } else if (token) {
-        // If we have a token but no user data, try to fetch user data
-        // This could happen if the user data was cleared but token remains
-        console.log('Token exists but no user data found, fetching from backend...');
         try {
           const response = await apiClient.get('/api/auth/me');
           const userData = response.data;
-          console.log('Fetched user data from backend:', userData);
           localStorage.setItem('user', JSON.stringify(userData));
           setUser(userData);
         } catch (error) {
-          console.error('Failed to fetch user data:', error);
-          // If we can't fetch user data, the token might be invalid
           localStorage.removeItem('token');
           localStorage.removeItem('user');
           window.location.href = '/login';
         }
       } else {
-        // No token or user data, redirect to login
-        console.log('No token or user data found, redirecting to login');
         window.location.href = '/login';
       }
     };
@@ -76,8 +61,6 @@ const Dashboard = () => {
 
   const fetchUserStats = async () => {
     try {
-      // For now, we'll use mock data until we implement the stats API
-      // Later, you can replace this with actual API calls
       setStats({
         courses: 0,
         events: 0,
@@ -86,7 +69,7 @@ const Dashboard = () => {
         following: user?.profile?.following?.length || 0
       });
     } catch (error) {
-      console.error('Failed to fetch user stats:', error);
+      // ignore
     }
   };
 
@@ -95,7 +78,7 @@ const Dashboard = () => {
       const response = await apiClient.get('/api/recommendations');
       setRecommendations(response.data);
     } catch (error) {
-      console.error('Failed to fetch recommendations:', error);
+      // ignore
     }
   };
 
@@ -114,7 +97,6 @@ const Dashboard = () => {
     <div className="dashboard">
       <div className="dashboard-header">
         <h1>Welcome back, {user.username || 'User'}! 👋</h1>
-        <p>Here's what's happening on your Bupue platform</p>
       </div>
 
       <div className="dashboard-stats">
@@ -123,56 +105,43 @@ const Dashboard = () => {
           <div className="stat-content">
             <h3>Courses</h3>
             <p className="stat-number">{stats.courses}</p>
-            <p className="stat-description">Available courses</p>
           </div>
-          <Link to="/courses" className="stat-link">Browse Courses</Link>
+          <Link to="/courses" className="stat-link">View Details</Link>
         </div>
         <div className="stat-card">
           <div className="stat-icon">📅</div>
           <div className="stat-content">
             <h3>Events</h3>
             <p className="stat-number">{stats.events}</p>
-            <p className="stat-description">Upcoming events</p>
           </div>
-          <Link to="/events" className="stat-link">View Events</Link>
+          <Link to="/events" className="stat-link">View Details</Link>
         </div>
         <div className="stat-card">
           <div className="stat-icon">🛍️</div>
           <div className="stat-content">
             <h3>Marketplace</h3>
             <p className="stat-number">{stats.marketplace}</p>
-            <p className="stat-description">Items for sale</p>
           </div>
-          <Link to="/marketplace" className="stat-link">Explore Marketplace</Link>
-        </div>
-        <div className="stat-card">
-          <div className="stat-icon">👥</div>
-          <div className="stat-content">
-            <h3>Network</h3>
-            <p className="stat-number">{stats.followers}</p>
-            <p className="stat-description">Followers</p>
-          </div>
-          <Link to="/profile" className="stat-link">View Profile</Link>
+          <Link to="/marketplace" className="stat-link">View Marketplace</Link>
         </div>
       </div>
 
       <div className="dashboard-actions">
         <h2>Quick Actions</h2>
-        <p className="actions-description">Start creating content or explore the platform</p>
         <div className="action-buttons">
           <Link to="/courses/create" className="action-btn primary">
             <span className="action-icon">➕</span>
             Create Course
           </Link>
-          <Link to="/events/create" className="action-btn secondary">
+          <Link to="/events/create" className="action-btn teal">
             <span className="action-icon">📅</span>
-            Create Event
+            Launch Event
           </Link>
-          <Link to="/marketplace/create" className="action-btn secondary">
+          <Link to="/marketplace/create" className="action-btn green">
             <span className="action-icon">🛍️</span>
             Add Item
           </Link>
-          <Link to="/profile" className="action-btn outline">
+          <Link to="/profile" className="action-btn gray">
             <span className="action-icon">👤</span>
             View Profile
           </Link>
