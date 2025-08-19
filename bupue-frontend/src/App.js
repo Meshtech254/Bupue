@@ -33,6 +33,8 @@ import Messaging from './components/messaging/Messaging';
 import UserProfile from './components/UserProfile';
 import AdminDashboard from './components/admin/AdminDashboard';
 import AdminErrorBoundary from './components/admin/AdminErrorBoundary';
+import AdminHome from './components/admin/AdminHome';
+import UserManagement from './components/admin/UserManagement';
 
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem('token');
@@ -74,7 +76,24 @@ function App() {
           <Route path="/courses/:id" element={<PrivateRoute><CourseDetail /></PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
           <Route path="/profile/:userId" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
-        <Route path="/admin/*" element={<PrivateRoute><AdminErrorBoundary><AdminDashboard /></AdminErrorBoundary></PrivateRoute>} />
+
+          <Route
+            path="/admin/*"
+            element={
+              <PrivateRoute>
+                <AdminErrorBoundary>
+                  <AdminDashboard />
+                </AdminErrorBoundary>
+              </PrivateRoute>
+            }
+          >
+            <Route index element={<AdminHome />} />
+            <Route path="users" element={<UserManagement />} />
+            <Route path="content" element={<div>Content management coming soon.</div>} />
+            <Route path="analytics" element={<div>Analytics coming soon.</div>} />
+            <Route path="settings" element={<div>System settings coming soon.</div>} />
+          </Route>
+
           <Route path="/marketplace" element={<PrivateRoute><ItemList /></PrivateRoute>} />
           <Route path="/marketplace/create" element={<PrivateRoute><CreateItem /></PrivateRoute>} />
           <Route path="/marketplace/:id" element={<PrivateRoute><ItemDetail /></PrivateRoute>} />
@@ -87,4 +106,4 @@ function App() {
   );
 }
 
-export default App; 
+export default App;
