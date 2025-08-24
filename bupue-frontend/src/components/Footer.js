@@ -79,9 +79,9 @@ const Footer = () => {
           <h3>Trust & Safety</h3>
           <div className="payment-logos">
             {/* Placeholder for payment logos */}
-            <span>Visa</span>
-            <span>MasterCard</span>
-            <span>M-Pesa</span>
+            <span>Visa.</span>
+            <span>MasterCard.</span>
+            <span>M-Pesa.</span>
             <span>PayPal</span>
           </div>
           
@@ -95,7 +95,7 @@ const Footer = () => {
       <div className="footer-bottom-bar">
         <div className="popular-categories">
           <h4>Popular Categories</h4>
-          <span>Trending Courses: <Link to="/courses?category=web-dev">Web Development</Link>, <Link to="/courses?category=digital-marketing">Digital Marketing</Link></span>
+          <span>Trending Courses: <Link to="/courses?category=web-dev">Web Development</Link>, <Link to="/courses?category=digital-marketing">Digital Marketing  </Link></span>
           <span>Upcoming Events: <Link to="/events?type=pitch-nights">Startup Pitch Nights</Link>, <Link to="/events?type=creator-meetups">Creator Meetups</Link></span>
         </div>
         

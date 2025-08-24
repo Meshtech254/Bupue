@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import Home from './components/Home';
+import OAuthCallback from './components/auth/OAuthCallback';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import CourseList from './components/courses/CourseList';
@@ -25,6 +26,7 @@ import Dashboard from './components/Dashboard';
 import Footer from './components/Footer';
 import About from './components/static/About';
 import Contact from './components/static/Contact';
+import FAQs from './components/static/FAQs';
 import Terms from './components/static/Terms';
 import Refunds from './components/static/Refunds';
 import Guidelines from './components/static/Guidelines';
@@ -48,12 +50,14 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
+          <Route path="/oauth/callback" element={<OAuthCallback />} />
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/faq" element={<FAQs />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/refunds" element={<Refunds />} />
           <Route path="/guidelines" element={<Guidelines />} />

@@ -1,42 +1,26 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import './Comments.css';
+import apiClient from '../../api/client';
 
-const CreateComment = ({ postId, onCommentAdded }) => {
+const CreateComment = ({ postId, onCreated }) => {
   const [text, setText] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
     try {
-      const token = localStorage.getItem('token');
-      await axios.post(`/api/events/${postId}/comments`, { text }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await apiClient.post(`/api/events/${postId}/comments`, { text });
       setText('');
-      if (onCommentAdded) onCommentAdded();
-    } catch (err) {
-      setError(err.response?.data?.message || 'Failed to add comment');
-    } finally {
-      setLoading(false);
+      onCreated?.();
+    } catch (e) {
+      // ignore
     }
   };
 
   return (
-    <form className="create-comment-form" onSubmit={handleSubmit}>
-      <textarea
-        value={text}
-        onChange={e => setText(e.target.value)}
-        placeholder="Add a comment..."
-        required
-      />
-      <button type="submit" disabled={loading}>{loading ? 'Posting...' : 'Post Comment'}</button>
-      {error && <div className="error">{error}</div>}
+    <form onSubmit={submit}>
+      <input value={text} onChange={e => setText(e.target.value)} placeholder="Write a comment..." />
+      <button type="submit">Post</button>
     </form>
   );
 };
 
-export default CreateComment; 
+export default CreateComment;

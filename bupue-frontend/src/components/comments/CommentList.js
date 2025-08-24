@@ -1,97 +1,63 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import './Comments.css';
+import apiClient from '../../api/client';
 
 const CommentList = ({ postId }) => {
   const [comments, setComments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [editingId, setEditingId] = useState(null);
+  const [editId, setEditId] = useState(null);
   const [editText, setEditText] = useState('');
-  const [editError, setEditError] = useState('');
-
-  const user = JSON.parse(localStorage.getItem('user') || 'null');
-
-  const fetchComments = async () => {
-    try {
-      const res = await axios.get(`/api/events/${postId}/comments`);
-      setComments(res.data);
-    } catch (err) {
-      setError('Failed to load comments');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
-    fetchComments();
-    // eslint-disable-next-line
+    const load = async () => {
+      try {
+        const res = await apiClient.get(`/api/events/${postId}/comments`);
+        setComments(res.data || []);
+      } catch (e) {
+        setComments([]);
+      }
+    };
+    load();
   }, [postId]);
 
-  const isAuthor = (comment) => user && comment.author && user.id === comment.author._id;
-
-  const handleEdit = (comment) => {
-    setEditingId(comment._id);
-    setEditText(comment.text);
-    setEditError('');
+  const startEdit = (comment) => {
+    setEditId(comment._id);
+    setEditText(comment.text || '');
   };
 
-  const handleEditChange = (e) => setEditText(e.target.value);
-
-  const handleEditSubmit = async (e, commentId) => {
-    e.preventDefault();
+  const submitEdit = async (commentId) => {
     try {
-      const token = localStorage.getItem('token');
-      await axios.put(`/api/events/${postId}/comments/${commentId}`, { text: editText }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setEditingId(null);
-      fetchComments();
-    } catch (err) {
-      setEditError(err.response?.data?.message || 'Failed to update comment');
+      await apiClient.put(`/api/events/${postId}/comments/${commentId}`, { text: editText });
+      setComments(prev => prev.map(c => c._id === commentId ? { ...c, text: editText } : c));
+      setEditId(null);
+      setEditText('');
+    } catch (e) {
+      // ignore
     }
   };
 
-  const handleDelete = async (commentId) => {
-    if (!window.confirm('Are you sure you want to delete this comment?')) return;
+  const remove = async (commentId) => {
     try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`/api/events/${postId}/comments/${commentId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      fetchComments();
-    } catch (err) {
-      alert('Failed to delete comment');
+      await apiClient.delete(`/api/events/${postId}/comments/${commentId}`);
+      setComments(prev => prev.filter(c => c._id !== commentId));
+    } catch (e) {
+      // ignore
     }
   };
-
-  if (loading) return <div>Loading comments...</div>;
-  if (error) return <div className="error">{error}</div>;
 
   return (
-    <div className="comments-list">
-      <h4>Comments</h4>
-      {comments.length === 0 && <div>No comments yet.</div>}
-      {comments.map(comment => (
-        <div key={comment._id} className="comment-item">
-          <div className="comment-author">{comment.author?.username || 'Unknown'}</div>
-          {editingId === comment._id ? (
-            <form className="edit-comment-form" onSubmit={e => handleEditSubmit(e, comment._id)}>
-              <textarea value={editText} onChange={handleEditChange} required />
-              <button type="submit">Save</button>
-              <button type="button" onClick={() => setEditingId(null)}>Cancel</button>
-              {editError && <div className="error">{editError}</div>}
-            </form>
+    <div>
+      {comments.map(c => (
+        <div key={c._id}>
+          {editId === c._id ? (
+            <>
+              <input value={editText} onChange={e => setEditText(e.target.value)} />
+              <button onClick={() => submitEdit(c._id)}>Save</button>
+              <button onClick={() => setEditId(null)}>Cancel</button>
+            </>
           ) : (
             <>
-              <div className="comment-text">{comment.text}</div>
-              <div className="comment-date">{new Date(comment.createdAt).toLocaleString()}</div>
-              {isAuthor(comment) && (
-                <div className="comment-actions">
-                  <button onClick={() => handleEdit(comment)}>Edit</button>
-                  <button onClick={() => handleDelete(comment._id)} className="danger">Delete</button>
-                </div>
-              )}
+              <div>{c.text}</div>
+              <button onClick={() => startEdit(c)}>Edit</button>
+              <button onClick={() => remove(c._id)}>Delete</button>
             </>
           )}
         </div>
@@ -100,4 +66,4 @@ const CommentList = ({ postId }) => {
   );
 };
 
-export default CommentList; 
+export default CommentList;
