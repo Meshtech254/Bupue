@@ -65,14 +65,14 @@ const CourseList = () => {
                 <h3>{course.title}</h3>
                 <p>{course.shortDescription}</p>
                 <div className="course-meta">
-                  <span>{course.price === 0 ? 'Free' : `$${course.price.toFixed(2)}`}</span>
+                  <span>{Number(course?.price) === 0 ? 'Free' : `$${Number(course?.price || 0).toFixed(2)}`}</span>
                   <span>By {course.owner?.profile?.displayName || course.owner?.username || 'Unknown'}</span>
                 </div>
-                {course.averageRating > 0 && (
+                {Number(course?.averageRating) > 0 && (
                   <div className="course-rating">
-                    {'★'.repeat(Math.round(course.averageRating))}
+                    {'★'.repeat(Math.round(Number(course.averageRating || 0)))}
                     <span className="rating-text">
-                      {course.averageRating.toFixed(1)} ({course.reviewCount} reviews)
+                      {Number(course.averageRating || 0).toFixed(1)} ({Number(course.reviewCount || 0)} reviews)
                     </span>
                   </div>
                 )}
