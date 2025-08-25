@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import apiClient from '../../api/client';
 import './Courses.css';
 
 const emptyLesson = { title: '', order: 0, type: 'video', videoUrl: '', embedUrl: '', textContent: '', durationSeconds: 0, freePreview: false, resources: [] };
 
 const CreateCourse = () => {
+  const navigate = useNavigate();
   const [basic, setBasic] = useState({
     title: '', shortDescription: '', fullDescription: '', category: '', subcategory: '', language: 'English', targetAudience: ''
   });
@@ -38,7 +40,7 @@ const CreateCourse = () => {
         tags: tags ? tags.split(',').map(s => s.trim()).filter(Boolean) : []
       };
       await apiClient.post('/api/courses', payload);
-      window.location.href = '/courses';
+      navigate('/courses');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create course');
     } finally {
